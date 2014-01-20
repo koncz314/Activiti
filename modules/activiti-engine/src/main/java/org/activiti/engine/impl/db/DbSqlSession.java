@@ -135,6 +135,11 @@ public class DbSqlSession implements Session {
     cachePut(persistentObject, false);
   }
   
+  public void update(String statement, Object parameters) {
+     String updateStatement = dbSqlSessionFactory.mapStatement(statement);
+     getSqlSession().update(updateStatement, parameters);
+  }
+  
   // delete ///////////////////////////////////////////////////////////////////
 
   public void delete(String statement, Object parameter) {
@@ -1084,6 +1089,10 @@ public class DbSqlSession implements Session {
     if (org.activiti.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP.equals(databaseSchemaUpdate)) {
       dbSchemaDrop();
     }
+  }
+  
+  public <T> T getCustomMapper(Class<T> type) {
+	  return sqlSession.getMapper(type);
   }
 
   // query factory methods ////////////////////////////////////////////////////  
