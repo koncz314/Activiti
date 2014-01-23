@@ -12,13 +12,16 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IImplementation;
+import hu.clickandlike.bpmn.model.interfaces.IOperationRef;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Tijs Rademakers
  */
-public class ServiceTask extends Task {
+public class ServiceTask extends Task implements IImplementation, IOperationRef{
 
   public static final String MAIL_TASK = "mail";
   

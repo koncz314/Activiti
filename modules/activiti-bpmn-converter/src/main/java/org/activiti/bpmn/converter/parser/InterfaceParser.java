@@ -35,9 +35,14 @@ public class InterfaceParser implements BpmnXMLConstants {
     
     Interface interfaceObject = new Interface();
     BpmnXMLUtil.addXMLLocation(interfaceObject, xtr);
-    interfaceObject.setId(model.getTargetNamespace() + ":" + xtr.getAttributeValue(null, ATTRIBUTE_ID));
+    
+    //interfaceObject.setId(model.getTargetNamespace() + ":" + xtr.getAttributeValue(null, ATTRIBUTE_ID));
+    interfaceObject.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+    
     interfaceObject.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
-    interfaceObject.setImplementationRef(parseMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF), model));
+    
+    //interfaceObject.setImplementationRef(parseMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF), model));
+    interfaceObject.setImplementationRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF));
     
     boolean readyWithInterface = false;
     Operation operation = null;
@@ -47,10 +52,15 @@ public class InterfaceParser implements BpmnXMLConstants {
         if (xtr.isStartElement() && ELEMENT_OPERATION.equals(xtr.getLocalName())) {
           operation = new Operation();
           BpmnXMLUtil.addXMLLocation(operation, xtr);
-          operation.setId(model.getTargetNamespace() + ":" + xtr.getAttributeValue(null, ATTRIBUTE_ID));
+          
+          //operation.setId(model.getTargetNamespace() + ":" + xtr.getAttributeValue(null, ATTRIBUTE_ID));
+          operation.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+          
           operation.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
-          operation.setImplementationRef(parseMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF), model));
-
+          
+          //operation.setImplementationRef(parseMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF), model));
+          operation.setImplementationRef(xtr.getAttributeValue(null, ATTRIBUTE_IMPLEMENTATION_REF));
+          
         } else if (xtr.isStartElement() && ELEMENT_IN_MESSAGE.equals(xtr.getLocalName())) {
           String inMessageRef = xtr.getElementText();
           if (operation != null && StringUtils.isNotEmpty(inMessageRef)) {

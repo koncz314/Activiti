@@ -18,9 +18,12 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.ReceiveTask;
+import org.activiti.bpmn.model.SendTask;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Tijs Rademakers
+ * @author Krisztian Koncz (krisztian.koncz@clickandlike.hu
  */
 public class ReceiveTaskXMLConverter extends BaseBpmnXMLConverter {
   
@@ -41,6 +44,13 @@ public class ReceiveTaskXMLConverter extends BaseBpmnXMLConverter {
   protected BaseElement convertXMLToElement(XMLStreamReader xtr) throws Exception {
     ReceiveTask receiveTask = new ReceiveTask();
     BpmnXMLUtil.addXMLLocation(receiveTask, xtr);
+    
+    
+    receiveTask.setInstantiate(Boolean.valueOf(xtr.getAttributeValue(null, ATTRIBUTE_INSTANTIATE)));
+    receiveTask.setMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_MESSAGE_REF));
+    receiveTask.setOperationRef(xtr.getAttributeValue(null, ATTRIBUTE_TASK_OPERATION_REF));
+    receiveTask.setImplementationType(xtr.getAttributeValue(null, ATTRIBUTE_TASK_IMPLEMENTATION));
+    
     parseChildElements(getXMLElementName(), receiveTask, xtr);
     return receiveTask;
   }
@@ -55,5 +65,14 @@ public class ReceiveTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  ReceiveTask receiveTask = (ReceiveTask)element;
+	  if (StringUtils.isNotEmpty(receiveTask.getMessageRef()))
+		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, receiveTask.getMessageRef());
+	  if (StringUtils.isNotEmpty(receiveTask.getOperationRef()))
+		  xtw.writeAttribute(ATTRIBUTE_TASK_OPERATION_REF, receiveTask.getOperationRef());
+	  if (receiveTask.getInstantiate() != null)
+		  xtw.writeAttribute(ATTRIBUTE_INSTANTIATE, receiveTask.getInstantiate().toString());
+	  if (receiveTask.getImplementationType() != null)
+		  xtw.writeAttribute(ATTRIBUTE_TASK_IMPLEMENTATION, receiveTask.getImplementationType().toString());
   }
 }

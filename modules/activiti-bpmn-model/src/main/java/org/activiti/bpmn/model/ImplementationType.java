@@ -22,5 +22,6 @@ public class ImplementationType {
   public static String IMPLEMENTATION_TYPE_THROW_MESSAGE_EVENT = "throwMessageEvent";
   public static String IMPLEMENTATION_TYPE_THROW_ERROR_EVENT = "throwErrorEvent";
   public static String IMPLEMENTATION_TYPE_WEBSERVICE = "##WebService";
+  public static String IMPLEMENTATION_TYPE_UNSPECIFIED = "##unspecified";
   
 }

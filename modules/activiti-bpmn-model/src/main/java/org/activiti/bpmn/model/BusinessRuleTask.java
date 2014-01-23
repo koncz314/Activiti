@@ -12,15 +12,18 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IImplementation;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Tijs Rademakers
  */
-public class BusinessRuleTask extends Task {
+public class BusinessRuleTask extends Task implements IImplementation {
 
   protected String resultVariableName;
+  protected String implementationType;
   protected boolean exclude;
   protected List<String> ruleNames = new ArrayList<String>();
   protected List<String> inputVariables = new ArrayList<String>();
@@ -68,7 +71,17 @@ public class BusinessRuleTask extends Task {
     setResultVariableName(otherElement.getResultVariableName());
     setExclude(otherElement.isExclude());
     setClassName(otherElement.getClassName());
+    setImplementationType(otherElement.getImplementationType());
     ruleNames = new ArrayList<String>(otherElement.getRuleNames());
     inputVariables = new ArrayList<String>(otherElement.getInputVariables());
   }
+	@Override
+	public String getImplementationType() {
+		return implementationType;
+	}
+	@Override
+	public void setImplementationType(String implementationType) {
+		this.implementationType = implementationType;
+		
+	}
 }

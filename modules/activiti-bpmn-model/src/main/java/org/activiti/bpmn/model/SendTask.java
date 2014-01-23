@@ -12,16 +12,25 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IImplementation;
+import hu.clickandlike.bpmn.model.interfaces.IMessageRef;
+import hu.clickandlike.bpmn.model.interfaces.IOperationRef;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Tijs Rademakers
+ * @author Krisztian Koncz (krisztian.koncz@clickandlike.hu
  */
-public class SendTask extends Task {
+
+//messageRef added by Krisztian Koncz
+
+public class SendTask extends Task implements IImplementation, IOperationRef, IMessageRef {
 
   protected String type;
   protected String implementationType;
+  protected String messageRef;
   protected String operationRef;
   protected List<FieldExtension> fieldExtensions = new ArrayList<FieldExtension>();
   
@@ -43,6 +52,15 @@ public class SendTask extends Task {
   public void setOperationRef(String operationRef) {
     this.operationRef = operationRef;
   }
+  
+	public String getMessageRef() {
+		return messageRef;
+	}
+
+	public void setMessageRef(String messageRef) {
+		this.messageRef = messageRef;
+	}
+
   public List<FieldExtension> getFieldExtensions() {
     return fieldExtensions;
   }
@@ -61,6 +79,7 @@ public class SendTask extends Task {
     setType(otherElement.getType());
     setImplementationType(otherElement.getImplementationType());
     setOperationRef(otherElement.getOperationRef());
+    setMessageRef(otherElement.getMessageRef());
     
     fieldExtensions = new ArrayList<FieldExtension>();
     if (otherElement.getFieldExtensions() != null && otherElement.getFieldExtensions().size() > 0) {

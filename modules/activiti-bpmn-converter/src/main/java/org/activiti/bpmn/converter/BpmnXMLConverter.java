@@ -44,6 +44,7 @@ import org.activiti.bpmn.converter.child.MultiInstanceParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
 import org.activiti.bpmn.converter.export.BPMNDIExport;
 import org.activiti.bpmn.converter.export.DefinitionsRootExport;
+import org.activiti.bpmn.converter.export.InterfaceExport;
 import org.activiti.bpmn.converter.export.MultiInstanceExport;
 import org.activiti.bpmn.converter.export.PoolExport;
 import org.activiti.bpmn.converter.export.ProcessExport;
@@ -468,6 +469,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 
       DefinitionsRootExport.writeRootElement(model, xtw, encoding);
       SignalAndMessageDefinitionExport.writeSignalsAndMessages(model, xtw);
+      InterfaceExport.writeInterfaces(model, xtw);
       PoolExport.writePools(model, xtw);
       
       for (Process process : model.getProcesses()) {

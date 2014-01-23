@@ -12,14 +12,18 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IMessageRef;
+import hu.clickandlike.bpmn.model.interfaces.IOperationRef;
+
 
 /**
  * @author Tijs Rademakers
  */
-public class MessageEventDefinition extends EventDefinition {
+public class MessageEventDefinition extends EventDefinition implements IMessageRef, IOperationRef {
 
   protected String messageRef;
-
+  protected String operationRef;
+  
   public String getMessageRef() {
     return messageRef;
   }
@@ -37,5 +41,16 @@ public class MessageEventDefinition extends EventDefinition {
   public void setValues(MessageEventDefinition otherDefinition) {
     super.setValues(otherDefinition);
     setMessageRef(otherDefinition.getMessageRef());
+    setOperationRef(otherDefinition.getOperationRef());
   }
+
+	@Override
+	public String getOperationRef() {
+		return operationRef;
+	}
+
+	@Override
+	public void setOperationRef(String operationRef) {
+		this.operationRef = operationRef;
+	}
 }

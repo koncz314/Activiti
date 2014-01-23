@@ -224,6 +224,7 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_EVENT_COMPENSATEDEFINITION = "compensateEventDefinition";
   public static final String ATTRIBUTE_COMPENSATE_ACTIVITYREF = "activityRef";
   public static final String ATTRIBUTE_COMPENSATE_WAITFORCOMPLETION = "waitForCompletion";
+  public static final String ATTRIBUTE_INSTANTIATE = "instantiate";
   
   public static final String ELEMENT_FORMPROPERTY = "formProperty";
   public static final String ATTRIBUTE_FORM_ID = "id";

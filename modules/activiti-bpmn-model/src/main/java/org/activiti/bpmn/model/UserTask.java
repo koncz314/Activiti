@@ -12,13 +12,15 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IImplementation;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Tijs Rademakers
  */
-public class UserTask extends Task {
+public class UserTask extends Task implements IImplementation {
 
   protected String assignee;
   protected String owner;
@@ -26,6 +28,7 @@ public class UserTask extends Task {
   protected String formKey;
   protected String dueDate;
   protected String category;
+  protected String implementationType;
   protected List<String> candidateUsers = new ArrayList<String>();
   protected List<String> candidateGroups = new ArrayList<String>();
   protected List<FormProperty> formProperties = new ArrayList<FormProperty>();
@@ -106,6 +109,7 @@ public class UserTask extends Task {
     setDueDate(otherElement.getDueDate());
     setPriority(otherElement.getPriority());
     setCategory(otherElement.getCategory());
+    setImplementationType(otherElement.getImplementationType());
     
     setCandidateGroups(new ArrayList<String>(otherElement.getCandidateGroups()));
     setCandidateUsers(new ArrayList<String>(otherElement.getCandidateUsers()));
@@ -124,4 +128,14 @@ public class UserTask extends Task {
       }
     }
   }
+	@Override
+	public String getImplementationType() {
+		
+		return implementationType;
+	}
+	@Override
+	public void setImplementationType(String implementationType) {
+		this.implementationType = implementationType;
+		
+	}
 }

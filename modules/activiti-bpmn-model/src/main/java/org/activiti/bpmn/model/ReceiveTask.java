@@ -12,18 +12,67 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IImplementation;
+import hu.clickandlike.bpmn.model.interfaces.IMessageRef;
+import hu.clickandlike.bpmn.model.interfaces.IOperationRef;
+
 /**
  * @author Tijs Rademakers
+ * @author Krisztian Koncz (krisztian.koncz@clickandlike.hu
  */
-public class ReceiveTask extends Task {
 
-  public ReceiveTask clone() {
+//updates added by Krisztian Koncz
+public class ReceiveTask extends Task implements IImplementation, IOperationRef, IMessageRef {
+
+	protected String implementationType;
+	protected String messageRef;
+	protected String operationRef;
+	protected Boolean instantiate;
+	
+	
+	public String getImplementationType() {
+		return implementationType;
+	}
+
+	public void setImplementationType(String implementationType) {
+		this.implementationType = implementationType;
+	}
+
+	public String getMessageRef() {
+		return messageRef;
+	}
+
+	public void setMessageRef(String messageRef) {
+		this.messageRef = messageRef;
+	}
+
+	public String getOperationRef() {
+		return operationRef;
+	}
+
+	public void setOperationRef(String operationRef) {
+		this.operationRef = operationRef;
+	}
+
+	public Boolean getInstantiate() {
+		return instantiate;
+	}
+
+	public void setInstantiate(Boolean instantiate) {
+		this.instantiate = instantiate;
+	}
+
+public ReceiveTask clone() {
     ReceiveTask clone = new ReceiveTask();
     clone.setValues(this);
     return clone;
   }
   
-  public void setValues(ManualTask otherElement) {
+  public void setValues(ReceiveTask otherElement) {
     super.setValues(otherElement);
+    setInstantiate(otherElement.getInstantiate());
+    setImplementationType(otherElement.getImplementationType());
+    setOperationRef(otherElement.getOperationRef());
+    setMessageRef(otherElement.getMessageRef());
   }
 }
