@@ -54,9 +54,12 @@ public class BpmnModel {
 
 	public Process getMainProcess() {
 	  if (getPools().size() > 0) {
-	    return getProcess(getPools().get(0).getId());
+		  //TODO check this solution
+	    //return getProcess(getPools().get(0).getId());
+		  return getProcess(null);
 	  } else {
-	    return getProcess(null);
+	    //return getProcess(null);
+		  return getProcess(getPools().get(0).getId());
 	  }
 	}
 
