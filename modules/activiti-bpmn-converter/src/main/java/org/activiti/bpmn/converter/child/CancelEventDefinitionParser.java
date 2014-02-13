@@ -34,6 +34,7 @@ public class CancelEventDefinitionParser extends BaseChildElementParser {
     
     CancelEventDefinition eventDefinition = new CancelEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
     ((Event) parentElement).getEventDefinitions().add(eventDefinition);
   }
 }

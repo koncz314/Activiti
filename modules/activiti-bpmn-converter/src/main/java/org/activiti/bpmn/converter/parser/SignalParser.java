@@ -28,6 +28,7 @@ public class SignalParser implements BpmnXMLConstants {
   public void parse(XMLStreamReader xtr, BpmnModel model) throws Exception {
     String signalId = xtr.getAttributeValue(null, ATTRIBUTE_ID);
     String signalName = xtr.getAttributeValue(null, ATTRIBUTE_NAME);
+    String signalStructureRef = xtr.getAttributeValue(null, ATTRIBUTE_STRUCTURE_REF);
     if (StringUtils.isEmpty(signalId)) {
       model.addProblem("signal must have an id", xtr);
     } else if (StringUtils.isEmpty(signalName)) {
@@ -41,7 +42,7 @@ public class SignalParser implements BpmnXMLConstants {
       }
       
       Signal signal = new Signal(signalId, signalName);
-      
+      signal.setStructureRef(signalStructureRef);
       String scope = xtr.getAttributeValue(ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_SCOPE);
       if (scope != null) {
         if (!scope.equals(Signal.SCOPE_GLOBAL) 

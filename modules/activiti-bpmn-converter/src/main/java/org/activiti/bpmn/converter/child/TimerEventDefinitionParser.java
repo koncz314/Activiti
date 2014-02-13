@@ -34,6 +34,7 @@ public class TimerEventDefinitionParser extends BaseChildElementParser {
     
     TimerEventDefinition eventDefinition = new TimerEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
     BpmnXMLUtil.parseChildElements(ELEMENT_EVENT_TIMERDEFINITION, eventDefinition, xtr, model);
     
     ((Event) parentElement).getEventDefinitions().add(eventDefinition);

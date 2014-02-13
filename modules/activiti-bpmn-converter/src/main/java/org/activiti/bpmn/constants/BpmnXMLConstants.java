@@ -45,7 +45,9 @@ public interface BpmnXMLConstants {
   
   public static final String ELEMENT_SIGNAL = "signal";
   public static final String ELEMENT_MESSAGE = "message";
+  public static final String ELEMENT_MESSAGE_FLOW = "messageFlow";
   public static final String ELEMENT_ERROR = "error";
+  public static final String ELEMENT_ERROR_REF = "errorRef";
   public static final String ELEMENT_COLLABORATION = "collaboration";
   public static final String ELEMENT_PARTICIPANT = "participant";
   public static final String ELEMENT_LANESET = "laneSet";
@@ -104,6 +106,7 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_ITEM_DEFINITION = "itemDefinition";
   public static final String ATTRIBUTE_STRUCTURE_REF = "structureRef";
   public static final String ATTRIBUTE_ITEM_KIND = "itemKind";
+  public static final String ATTRIBUTE_ISCOLLECTION = "isCollection";
   
   public static final String ELEMENT_IOSPECIFICATION = "ioSpecification";
   public static final String ELEMENT_DATA_INPUT = "dataInput";

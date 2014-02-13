@@ -35,6 +35,7 @@ public class MessageEventDefinitionParser extends BaseChildElementParser {
     
     MessageEventDefinition eventDefinition = new MessageEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
     eventDefinition.setMessageRef(xtr.getAttributeValue(null, ATTRIBUTE_MESSAGE_REF));
     
     if(StringUtils.isEmpty(eventDefinition.getMessageRef())) {

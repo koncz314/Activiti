@@ -64,15 +64,24 @@ public class InterfaceParser implements BpmnXMLConstants {
         } else if (xtr.isStartElement() && ELEMENT_IN_MESSAGE.equals(xtr.getLocalName())) {
           String inMessageRef = xtr.getElementText();
           if (operation != null && StringUtils.isNotEmpty(inMessageRef)) {
-            operation.setInMessageRef(parseMessageRef(inMessageRef.trim(), model));
+            //operation.setInMessageRef(parseMessageRef(inMessageRef.trim(), model));
+        	  operation.setInMessageRef(inMessageRef);
           }
           
         } else if (xtr.isStartElement() && ELEMENT_OUT_MESSAGE.equals(xtr.getLocalName())) {
           String outMessageRef = xtr.getElementText();
           if (operation != null && StringUtils.isNotEmpty(outMessageRef)) {
-            operation.setOutMessageRef(parseMessageRef(outMessageRef.trim(), model));
+           // operation.setOutMessageRef(parseMessageRef(outMessageRef.trim(), model));
+        	  operation.setOutMessageRef(outMessageRef);
           }
           
+        } else if (xtr.isStartElement() && ELEMENT_ERROR_REF.equals(xtr.getLocalName())) {
+        	String errorRef = xtr.getElementText();
+        	if (operation != null && StringUtils.isNotEmpty(errorRef)) {
+                // operation.setOutMessageRef(parseMessageRef(outMessageRef.trim(), model));
+             	  operation.getErrorMessageRef().add(errorRef);
+               }
+        	
         } else if (xtr.isEndElement() && ELEMENT_OPERATION.equalsIgnoreCase(xtr.getLocalName())) {
           if (operation != null && StringUtils.isNotEmpty(operation.getImplementationRef())) {
             interfaceObject.getOperations().add(operation);

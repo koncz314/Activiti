@@ -374,6 +374,9 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   
   protected void writeTimerDefinition(Event parentEvent, TimerEventDefinition timerDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_TIMERDEFINITION);
+    if (StringUtils.isNotEmpty(timerDefinition.getId())) {
+    	writeDefaultAttribute(ATTRIBUTE_ID, timerDefinition.getId(), xtw);
+    }
     boolean didWriteExtensionStartElement = BpmnXMLUtil.writeExtensionElements(timerDefinition, false, xtw);
     if (didWriteExtensionStartElement) {
       xtw.writeEndElement();
@@ -400,6 +403,9 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   protected void writeSignalDefinition(Event parentEvent, SignalEventDefinition signalDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_SIGNALDEFINITION);
     writeDefaultAttribute(ATTRIBUTE_SIGNAL_REF, signalDefinition.getSignalRef(), xtw);
+    if (StringUtils.isNotEmpty(signalDefinition.getId())) {
+    	writeDefaultAttribute(ATTRIBUTE_ID, signalDefinition.getId(), xtw);
+    }
     if (parentEvent instanceof ThrowEvent && signalDefinition.isAsync()) {
       BpmnXMLUtil.writeQualifiedAttribute(ATTRIBUTE_ACTIVITY_ASYNCHRONOUS, "true", xtw);
     }
@@ -413,8 +419,11 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   protected void writeMessageDefinition(Event parentEvent, MessageEventDefinition messageDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_MESSAGEDEFINITION);
     
+    if (StringUtils.isNotEmpty(messageDefinition.getId())) {
+    	writeDefaultAttribute(ATTRIBUTE_ID, messageDefinition.getId(), xtw);
+    }
     String messageRef = messageDefinition.getMessageRef();
-    if (StringUtils.isNotEmpty(messageRef)) {
+    /*if (StringUtils.isNotEmpty(messageRef)) {
       // remove the namespace from the message id if set
       if (messageRef.startsWith(model.getTargetNamespace())) {
         messageRef = messageRef.replace(model.getTargetNamespace(), "");
@@ -428,8 +437,13 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
           }
         }
       }
-    }
+    }*/
     writeDefaultAttribute(ATTRIBUTE_MESSAGE_REF, messageRef, xtw);
+    if (StringUtils.isNotEmpty(messageDefinition.getOperationRef())) {
+    	xtw.writeStartElement(ATTRIBUTE_TASK_OPERATION_REF);
+    	xtw.writeCharacters(messageDefinition.getOperationRef());
+    	xtw.writeEndElement();
+    }
     boolean didWriteExtensionStartElement = BpmnXMLUtil.writeExtensionElements(messageDefinition, false, xtw);
     if (didWriteExtensionStartElement) {
       xtw.writeEndElement();
@@ -439,7 +453,10 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   
   protected void writeErrorDefinition(Event parentEvent, ErrorEventDefinition errorDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_ERRORDEFINITION);
-    writeDefaultAttribute(ATTRIBUTE_ERROR_REF, errorDefinition.getErrorCode(), xtw);
+    if (StringUtils.isNotEmpty(errorDefinition.getId())) {
+    	writeDefaultAttribute(ATTRIBUTE_ID, errorDefinition.getId(), xtw);
+    }
+    writeDefaultAttribute(ATTRIBUTE_ERROR_REF, errorDefinition.getErrorRef(), xtw);
     boolean didWriteExtensionStartElement = BpmnXMLUtil.writeExtensionElements(errorDefinition, false, xtw);
     if (didWriteExtensionStartElement) {
       xtw.writeEndElement();
@@ -449,6 +466,9 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   
   protected void writeTerminateDefinition(Event parentEvent, TerminateEventDefinition terminateDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_TERMINATEDEFINITION);
+    if (StringUtils.isNotEmpty(terminateDefinition.getId())) {
+    	writeDefaultAttribute(ATTRIBUTE_ID, terminateDefinition.getId(), xtw);
+    }
     boolean didWriteExtensionStartElement = BpmnXMLUtil.writeExtensionElements(terminateDefinition, false, xtw);
     if (didWriteExtensionStartElement) {
       xtw.writeEndElement();

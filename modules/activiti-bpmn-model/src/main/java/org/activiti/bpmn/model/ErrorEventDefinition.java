@@ -12,18 +12,20 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IErrorRef;
+
 /**
  * @author Tijs Rademakers
  */
-public class ErrorEventDefinition extends EventDefinition {
+public class ErrorEventDefinition extends EventDefinition implements IErrorRef{
 
-  protected String errorCode;
+  protected String errorRef;
 
-  public String getErrorCode() {
-    return errorCode;
+  public String getErrorRef() {
+    return errorRef;
   }
-  public void setErrorCode(String errorCode) {
-    this.errorCode = errorCode;
+  public void setErrorRef(String errorRef) {
+    this.errorRef = errorRef;
   }
   
   public ErrorEventDefinition clone() {
@@ -34,6 +36,6 @@ public class ErrorEventDefinition extends EventDefinition {
   
   public void setValues(ErrorEventDefinition otherDefinition) {
     super.setValues(otherDefinition);
-    setErrorCode(otherDefinition.getErrorCode());
+    setErrorRef(otherDefinition.getErrorRef());
   }
 }

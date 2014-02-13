@@ -24,6 +24,8 @@ public class Signal extends BaseElement {
   
   protected String scope;
 
+  protected String structureRef;
+  
   public Signal() {
   }
   
@@ -48,7 +50,15 @@ public class Signal extends BaseElement {
     this.scope = scope;
   }
   
-  public Signal clone() {
+  public String getStructureRef() {
+	return structureRef;
+  }
+
+  public void setStructureRef(String structureRef) {
+	this.structureRef = structureRef;
+  }
+
+public Signal clone() {
     Signal clone = new Signal();
     clone.setValues(this);
     return clone;
@@ -58,5 +68,6 @@ public class Signal extends BaseElement {
     super.setValues(otherElement);
     setName(otherElement.getName());
     setScope(otherElement.getScope());
+    setStructureRef(otherElement.getStructureRef());
   }
 }

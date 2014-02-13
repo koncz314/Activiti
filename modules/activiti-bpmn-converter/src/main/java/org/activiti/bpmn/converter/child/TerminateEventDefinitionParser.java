@@ -35,7 +35,7 @@ public class TerminateEventDefinitionParser extends BaseChildElementParser {
     
     TerminateEventDefinition eventDefinition = new TerminateEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
-    
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
     BpmnXMLUtil.parseChildElements(ELEMENT_EVENT_TERMINATEDEFINITION, eventDefinition, xtr, model);
     
     ((Event) parentElement).getEventDefinitions().add(eventDefinition);

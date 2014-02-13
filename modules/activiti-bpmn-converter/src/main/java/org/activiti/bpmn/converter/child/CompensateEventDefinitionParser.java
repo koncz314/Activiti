@@ -35,6 +35,7 @@ public class CompensateEventDefinitionParser extends BaseChildElementParser {
     
     CompensateEventDefinition eventDefinition = new CompensateEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
     eventDefinition.setActivityRef(xtr.getAttributeValue(null, ATTRIBUTE_COMPENSATE_ACTIVITYREF));
     if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_COMPENSATE_WAITFORCOMPLETION))) {
       eventDefinition.setWaitForCompletion(Boolean.parseBoolean(xtr.getAttributeValue(null, ATTRIBUTE_COMPENSATE_WAITFORCOMPLETION)));

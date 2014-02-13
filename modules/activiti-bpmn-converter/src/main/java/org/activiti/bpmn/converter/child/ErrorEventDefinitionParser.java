@@ -36,8 +36,9 @@ public class ErrorEventDefinitionParser extends BaseChildElementParser {
     
     ErrorEventDefinition eventDefinition = new ErrorEventDefinition();
     BpmnXMLUtil.addXMLLocation(eventDefinition, xtr);
-    eventDefinition.setErrorCode(xtr.getAttributeValue(null, "errorRef"));
-    if (parentElement instanceof EndEvent && StringUtils.isEmpty(eventDefinition.getErrorCode())) {
+    eventDefinition.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+    eventDefinition.setErrorRef(xtr.getAttributeValue(null, ATTRIBUTE_ERROR_REF));
+    if (parentElement instanceof EndEvent && StringUtils.isEmpty(eventDefinition.getErrorRef())) {
       model.addProblem("errorRef is required for an error event", xtr);
     }
     

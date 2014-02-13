@@ -18,7 +18,7 @@ public class SignalAndMessageDefinitionExport implements BpmnXMLConstants {
 
   public static void writeSignalsAndMessages(BpmnModel model, XMLStreamWriter xtw) throws Exception {
     
-    for (Process process : model.getProcesses()) {
+    /*for (Process process : model.getProcesses()) {
       for (FlowElement flowElement : process.findFlowElementsOfType(Event.class)) {
         Event event = (Event) flowElement;
         if (event.getEventDefinitions().size() > 0) {
@@ -39,12 +39,15 @@ public class SignalAndMessageDefinitionExport implements BpmnXMLConstants {
           }
         }
       }
-    }
+    }*/
     
     for (Signal signal : model.getSignals()) {
       xtw.writeStartElement(ELEMENT_SIGNAL);
       xtw.writeAttribute(ATTRIBUTE_ID, signal.getId());
       xtw.writeAttribute(ATTRIBUTE_NAME, signal.getName());
+      if (StringUtils.isNotEmpty(signal.getStructureRef())) {
+    	  xtw.writeAttribute(ATTRIBUTE_STRUCTURE_REF, signal.getStructureRef());
+      }
       if (signal.getScope() != null) {
         xtw.writeAttribute(ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_SCOPE, signal.getScope());
       }
@@ -53,7 +56,7 @@ public class SignalAndMessageDefinitionExport implements BpmnXMLConstants {
     
     for (Message message : model.getMessages()) {
       xtw.writeStartElement(ELEMENT_MESSAGE);
-      String messageId = message.getId();
+      String messageId = message.getId();/*
       // remove the namespace from the message id if set
       if (model.getTargetNamespace() != null && messageId.startsWith(model.getTargetNamespace())) {
         messageId = messageId.replace(model.getTargetNamespace(), "");
@@ -66,7 +69,7 @@ public class SignalAndMessageDefinitionExport implements BpmnXMLConstants {
             messageId = prefix + messageId;
           }
         }
-      }
+      }*/
       xtw.writeAttribute(ATTRIBUTE_ID, messageId);
       if (StringUtils.isNotEmpty(message.getName())) {
         xtw.writeAttribute(ATTRIBUTE_NAME, message.getName());

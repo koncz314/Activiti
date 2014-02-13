@@ -12,10 +12,12 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.ISignalRef;
+
 /**
  * @author Tijs Rademakers
  */
-public class SignalEventDefinition extends EventDefinition {
+public class SignalEventDefinition extends EventDefinition implements ISignalRef {
 
   protected String signalRef;
   protected boolean async;

@@ -4,6 +4,7 @@ public class ItemDefinition extends BaseElement {
 
   protected String structureRef;
   protected String itemKind;
+  protected boolean isCollection = false;
 
   public String getStructureRef() {
     return structureRef;
@@ -21,7 +22,15 @@ public class ItemDefinition extends BaseElement {
     this.itemKind = itemKind;
   }
   
-  public ItemDefinition clone() {
+	public boolean isCollection() {
+		return isCollection;
+	}
+
+	public void setCollection(boolean isCollection) {
+		this.isCollection = isCollection;
+	}
+
+public ItemDefinition clone() {
     ItemDefinition clone = new ItemDefinition();
     clone.setValues(this);
     return clone;
@@ -31,5 +40,6 @@ public class ItemDefinition extends BaseElement {
     super.setValues(otherElement);
     setStructureRef(otherElement.getStructureRef());
     setItemKind(otherElement.getItemKind());
+    setCollection(otherElement.isCollection());
   }
 }

@@ -36,6 +36,7 @@ public class PoolExport implements BpmnXMLConstants {
         }
         xtw.writeEndElement();
       }
+      MessageFlowExport.writeMessageFlows(model, xtw);
       xtw.writeEndElement();
     }
   }

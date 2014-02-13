@@ -44,18 +44,23 @@ import org.activiti.bpmn.converter.child.MultiInstanceParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
 import org.activiti.bpmn.converter.export.BPMNDIExport;
 import org.activiti.bpmn.converter.export.DefinitionsRootExport;
+import org.activiti.bpmn.converter.export.ErrorExport;
+import org.activiti.bpmn.converter.export.ImportExport;
 import org.activiti.bpmn.converter.export.InterfaceExport;
+import org.activiti.bpmn.converter.export.ItemDefinitionExport;
 import org.activiti.bpmn.converter.export.MultiInstanceExport;
 import org.activiti.bpmn.converter.export.PoolExport;
 import org.activiti.bpmn.converter.export.ProcessExport;
 import org.activiti.bpmn.converter.export.SignalAndMessageDefinitionExport;
 import org.activiti.bpmn.converter.parser.BpmnEdgeParser;
 import org.activiti.bpmn.converter.parser.BpmnShapeParser;
+import org.activiti.bpmn.converter.parser.ErrorParser;
 import org.activiti.bpmn.converter.parser.ExtensionElementsParser;
 import org.activiti.bpmn.converter.parser.ImportParser;
 import org.activiti.bpmn.converter.parser.InterfaceParser;
 import org.activiti.bpmn.converter.parser.ItemDefinitionParser;
 import org.activiti.bpmn.converter.parser.LaneParser;
+import org.activiti.bpmn.converter.parser.MessageFlowParser;
 import org.activiti.bpmn.converter.parser.MessageParser;
 import org.activiti.bpmn.converter.parser.PotentialStarterParser;
 import org.activiti.bpmn.converter.parser.ProcessParser;
@@ -292,11 +297,8 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
           new MessageParser().parse(xtr, model);
           
 				} else if (ELEMENT_ERROR.equals(xtr.getLocalName())) {
-          
-          if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_ID))) {
-            model.addError(xtr.getAttributeValue(null, ATTRIBUTE_ID),
-                xtr.getAttributeValue(null, ATTRIBUTE_ERROR_CODE));
-          }
+          new ErrorParser().parse(xtr, model);
+				
           
 				} else if (ELEMENT_IMPORT.equals(xtr.getLocalName())) {
 				  new ImportParser().parse(xtr, model);
@@ -371,6 +373,8 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 				} else if (ELEMENT_DI_EDGE.equals(xtr.getLocalName())) {
 				  new BpmnEdgeParser().parse(xtr, model);
 
+				} else if (ELEMENT_MESSAGE_FLOW.equals(xtr.getLocalName())) {
+					new MessageFlowParser().parse(xtr, model);
 				} else {
 
 					if (activeSubProcessList.size() > 0 && ELEMENT_MULTIINSTANCE.equalsIgnoreCase(xtr.getLocalName())) {
@@ -468,8 +472,13 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       XMLStreamWriter xtw = new IndentingXMLStreamWriter(writer);
 
       DefinitionsRootExport.writeRootElement(model, xtw, encoding);
+      ImportExport.writeImports(model, xtw);
+      ItemDefinitionExport.writeItemDefinitions(model, xtw);
       SignalAndMessageDefinitionExport.writeSignalsAndMessages(model, xtw);
+      ErrorExport.writeErrors(model, xtw);
       InterfaceExport.writeInterfaces(model, xtw);
+      
+      
       PoolExport.writePools(model, xtw);
       
       for (Process process : model.getProcesses()) {

@@ -44,6 +44,12 @@ public class InterfaceExport implements BpmnXMLConstants {
 					xtw.writeEndElement();
 				}
 				
+				for(String errorMessageRef: oper.getErrorMessageRef()) {
+					xtw.writeStartElement(ELEMENT_ERROR_REF);
+					xtw.writeCharacters(errorMessageRef);
+					xtw.writeEndElement();
+				}
+				
 				xtw.writeEndElement();
 			}
 			xtw.writeEndElement();

@@ -36,8 +36,12 @@ public class BpmnModel {
 	protected Map<String, List<GraphicInfo>> flowLocationMap = new LinkedHashMap<String, List<GraphicInfo>>();
 	protected Map<String, Signal> signalMap = new LinkedHashMap<String, Signal>();
 	protected Map<String, Message> messageMap = new LinkedHashMap<String, Message>();
-	protected Map<String, String> errorMap = new LinkedHashMap<String, String>();
+	protected Map<String, BPMNError> errorMap = new LinkedHashMap<String, BPMNError>();
 	protected Map<String, ItemDefinition> itemDefinitionMap = new LinkedHashMap<String, ItemDefinition>();
+	protected Map<String, EventDefinition> eventDefintionMap = new LinkedHashMap<String, EventDefinition>();
+
+	protected List<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
+	
 	protected List<Pool> pools = new ArrayList<Pool>();
 	protected List<Import> imports = new ArrayList<Import>();
 	protected List<Interface> interfaces = new ArrayList<Interface>();
@@ -305,22 +309,26 @@ public class BpmnModel {
     return messageMap.containsKey(messageId);
   }
   
-  public Map<String, String> getErrors() {
-    return errorMap;
+  public Collection<BPMNError> getErrors() {
+    return errorMap.values();
   }
   
-  public void setErrors(Map<String, String> errorMap) {
+  public void setErrors(Map<String, BPMNError> errorMap) {
     this.errorMap = errorMap;
   }
 
-  public void addError(String errorRef, String errorCode) {
-    if (StringUtils.isNotEmpty(errorRef)) {
-      errorMap.put(errorRef, errorCode);
+  public void addError(BPMNError error) {
+	  if (error != null && StringUtils.isNotEmpty(error.getId())) {
+      errorMap.put(error.getId(), error);
     }
   }
   
-  public boolean containsErrorRef(String errorRef) {
-    return errorMap.containsKey(errorRef);
+  public BPMNError getError(String id) {
+	  return errorMap.get(id);
+  }
+  
+  public boolean containsErrorId(String errorId) {
+    return errorMap.containsKey(errorId);
   }
   
   public Map<String, ItemDefinition> getItemDefinitions() {
@@ -424,4 +432,51 @@ public class BpmnModel {
   public List<Warning> getWarning() {
     return warnings;
   }
+  
+	public Collection<EventDefinition> getEventDefinitions() {
+		return eventDefintionMap.values();
+	}
+
+	public void setEventDefinitions(
+			Collection<EventDefinition> eventDefinitonList) {
+		if (eventDefinitonList != null) {
+			eventDefintionMap.clear();
+			for (EventDefinition eventDefinition : eventDefinitonList) {
+				addEventDefinition(eventDefinition);
+			}
+		}
+	}
+
+	public void addEventDefinition(EventDefinition eventDefinition) {
+		if (eventDefinition != null
+				&& StringUtils.isNotEmpty(eventDefinition.getId())) {
+			eventDefintionMap.put(eventDefinition.getId(), eventDefinition);
+		}
+	}
+
+	public EventDefinition getEventDefinition(String id) {
+		return eventDefintionMap.get(id);
+	}
+
+	public boolean containsEventDefinitionId(String eventDefinitionId) {
+		return eventDefintionMap.containsKey(eventDefinitionId);
+	}
+	
+	public List<MessageFlow> getMessageFlows() {
+		return messageFlows;
+	}
+	
+	public void setMessageFlows(List<MessageFlow> messageFlows) {
+		this.messageFlows = messageFlows;
+	
+	}
+	
+	public void deleteMessageFlowById(String idToDelete) {
+		for (MessageFlow messageFlow : messageFlows) {
+			if (messageFlow.getId().equals(idToDelete)) {
+				messageFlows.remove(messageFlow);
+			}
+		}
+	}
+
 }
