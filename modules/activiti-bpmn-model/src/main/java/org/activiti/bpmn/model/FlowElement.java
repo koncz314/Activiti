@@ -23,6 +23,7 @@ public abstract class FlowElement extends BaseElement implements HasExecutionLis
 
   protected String name;
   protected String documentation;
+  protected List<String> categoryValueRefs = new ArrayList<String>();
   protected List<ActivitiListener> executionListeners = new ArrayList<ActivitiListener>();
 
   public String getName() {
@@ -41,9 +42,18 @@ public abstract class FlowElement extends BaseElement implements HasExecutionLis
     this.documentation = documentation;
   }
   
+  public List<String> getCategoryValueRefs() {
+	return categoryValueRefs;
+  }
+
+  public void setCategoryValueRefs(List<String> categoryValueRefs) {
+	this.categoryValueRefs = categoryValueRefs;
+  }
+
   public List<ActivitiListener> getExecutionListeners() {
     return executionListeners;
   }
+  
   public void setExecutionListeners(List<ActivitiListener> executionListeners) {
     this.executionListeners = executionListeners;
   }
@@ -61,5 +71,13 @@ public abstract class FlowElement extends BaseElement implements HasExecutionLis
         executionListeners.add(listener.clone());
       }
     }
+    
+    categoryValueRefs = new ArrayList<String>();
+    if (otherElement.getCategoryValueRefs() != null && otherElement.getCategoryValueRefs().size() > 0) {
+      for (String categoryValueRef : otherElement.getCategoryValueRefs()) {
+    	  categoryValueRefs.add(categoryValueRef);
+      }
+    }
+    
   }
 }

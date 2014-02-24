@@ -34,7 +34,7 @@ public interface BpmnXMLConstants {
   public static final String OMGDC_PREFIX = "omgdc";
   public static final String OMGDI_NAMESPACE = "http://www.omg.org/spec/DD/20100524/DI";
   public static final String OMGDI_PREFIX = "omgdi";
-  
+  public static final String XSD_PREFIX = "xsd";
   public static final String ATTRIBUTE_ID = "id";
   public static final String ATTRIBUTE_NAME = "name";
   public static final String ATTRIBUTE_TYPE = "type";
@@ -42,6 +42,10 @@ public interface BpmnXMLConstants {
   public static final String ATTRIBUTE_ITEM_REF = "itemRef";
   public static final String ELEMENT_DEFINITIONS = "definitions";
   public static final String ELEMENT_DOCUMENTATION = "documentation";
+  
+  public static final String ELEMENT_CATEGORY = "category";
+  public static final String ELEMENT_CATEGORY_VALUE = "categoryValue";
+  public static final String ATTRIBUTE_VALUE = "value";
   
   public static final String ELEMENT_SIGNAL = "signal";
   public static final String ELEMENT_MESSAGE = "message";
@@ -149,6 +153,11 @@ public interface BpmnXMLConstants {
   public static final String ATTRIBUTE_MULTIINSTANCE_COLLECTION = "collection";
   public static final String ATTRIBUTE_MULTIINSTANCE_VARIABLE = "elementVariable";
   public static final String ATTRIBUTE_MULTIINSTANCE_INDEX_VARIABLE = "elementIndexVariable";
+  
+  public static final String ELEMENT_STANDARD_LOOP = "standardLoopCharacteristics";
+  public static final String ELEMENT_LOOP_CONDITION = "loopCondition";
+  public static final String ATTRIBUTE_TEST_BEFORE = "testBefore";
+  public static final String ATTRIBUTE_LOOP_MAXIMUM = "loopMaximum";
 
   public static final String ATTRIBUTE_TASK_IMPLEMENTATION = "implementation";
   public static final String ATTRIBUTE_TASK_OPERATION_REF = "operationRef";
@@ -193,6 +202,8 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_TEXT_ANNOTATION = "textAnnotation";
   public static final String ATTRIBUTE_TEXTFORMAT = "textFormat";
   public static final String ELEMENT_TEXT_ANNOTATION_TEXT = "text";
+  public static final String ELEMENT_GROUP = "group";
+  public static final String ATTRIBUTE_CATEGORY_VALUE_REF = "categoryValueRef";
   
   public static final String ELEMENT_ASSOCIATION = "association";
   

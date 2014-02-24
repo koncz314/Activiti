@@ -16,7 +16,7 @@ package org.activiti.bpmn.model;
 /**
  * @author Tijs Rademakers
  */
-public class MultiInstanceLoopCharacteristics extends BaseElement {
+public class MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
   protected String inputDataItem;
   protected String loopCardinality;

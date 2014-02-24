@@ -39,7 +39,10 @@ public class BpmnModel {
 	protected Map<String, BPMNError> errorMap = new LinkedHashMap<String, BPMNError>();
 	protected Map<String, ItemDefinition> itemDefinitionMap = new LinkedHashMap<String, ItemDefinition>();
 	protected Map<String, EventDefinition> eventDefintionMap = new LinkedHashMap<String, EventDefinition>();
-
+	protected Map<String, Category> categoryMap = new LinkedHashMap<String, Category>();
+	protected Map<String, Group> groupMap = new LinkedHashMap<String, Group>();
+	
+	
 	protected List<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 	
 	protected List<Pool> pools = new ArrayList<Pool>();
@@ -53,14 +56,14 @@ public class BpmnModel {
 	protected int nextFlowIdCounter = 1;
 
 	public Process getMainProcess() {
-	  if (getPools().size() > 0) {
+	  //if (getPools().size() > 0) {
 		  //TODO check this solution
 	    //return getProcess(getPools().get(0).getId());
 		  return getProcess(null);
-	  } else {
+	  //} else {
 	    //return getProcess(null);
-		  return getProcess(getPools().get(0).getId());
-	  }
+		//  return getProcess(getPools().get(0).getId());
+	  //}
 	}
 
 	public Process getProcess(String poolRef) {
@@ -436,21 +439,9 @@ public class BpmnModel {
     return warnings;
   }
   
-	public Collection<EventDefinition> getEventDefinitions() {
-		return eventDefintionMap.values();
-	}
-
-	public void setEventDefinitions(
-			Collection<EventDefinition> eventDefinitonList) {
-		if (eventDefinitonList != null) {
-			eventDefintionMap.clear();
-			for (EventDefinition eventDefinition : eventDefinitonList) {
-				addEventDefinition(eventDefinition);
-			}
-		}
-	}
-
-	public void addEventDefinition(EventDefinition eventDefinition) {
+	
+  
+  	public void addEventDefinition(EventDefinition eventDefinition) {
 		if (eventDefinition != null
 				&& StringUtils.isNotEmpty(eventDefinition.getId())) {
 			eventDefintionMap.put(eventDefinition.getId(), eventDefinition);
@@ -464,7 +455,92 @@ public class BpmnModel {
 	public boolean containsEventDefinitionId(String eventDefinitionId) {
 		return eventDefintionMap.containsKey(eventDefinitionId);
 	}
+  
+  	public Collection<EventDefinition> getEventDefinitions() {
+		return eventDefintionMap.values();
+	}
+
+	public void setEventDefinitions(
+			Collection<EventDefinition> eventDefinitonList) {
+		if (eventDefinitonList != null) {
+			eventDefintionMap.clear();
+			for (EventDefinition eventDefinition : eventDefinitonList) {
+				addEventDefinition(eventDefinition);
+			}
+		}
+	}
 	
+	public void addCategory(Category category) {
+		if (category != null
+				&& StringUtils.isNotEmpty(category.getId())) {
+			categoryMap.put(category.getId(), category);
+		}
+	}
+
+	public Category getCategory(String id) {
+		return categoryMap.get(id);
+	}
+
+	public boolean containsCategoryId(String categoryId) {
+		return categoryMap.containsKey(categoryId);
+	}
+	
+
+	public Collection<Category> getCategories() {
+		return categoryMap.values();
+	}
+
+	public void setCategories(Collection<Category> categoryList) {
+		if (categoryList != null) {
+			categoryMap.clear();
+			for (Category category : categoryList) {
+				addCategory(category);
+			}
+		}
+	}
+	
+	public List<CategoryValue> getAllCategoryValue() {
+		List<CategoryValue> list = new ArrayList<CategoryValue>();
+		for(Category category : getCategories()) {
+			list.addAll(category.getCategoryValues());
+		}
+		return list;
+	}
+	
+	//
+	
+	public void addGroup(Group group) {
+		if (group != null
+				&& StringUtils.isNotEmpty(group.getId())) {
+			groupMap.put(group.getId(), group);
+		}
+	}
+
+	public Group getGroup(String id) {
+		return groupMap.get(id);
+	}
+
+	public boolean containsGroupId(String groupId) {
+		return groupMap.containsKey(groupId);
+	}
+	
+
+	public Collection<Group> getGroups() {
+		return groupMap.values();
+	}
+
+	public void setGroups(Collection<Group> groupList) {
+		if (groupList != null) {
+			groupMap.clear();
+			for (Group group : groupList) {
+				addGroup(group);
+			}
+		}
+	}
+	
+	
+	
+
 	public List<MessageFlow> getMessageFlows() {
 		return messageFlows;
 	}

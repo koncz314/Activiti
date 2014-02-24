@@ -18,7 +18,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.ReceiveTask;
-import org.activiti.bpmn.model.SendTask;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -57,14 +56,6 @@ public class ReceiveTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-  }
-  
-  @Override
-  protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-  }
-
-  @Override
-  protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
 	  ReceiveTask receiveTask = (ReceiveTask)element;
 	  if (StringUtils.isNotEmpty(receiveTask.getMessageRef()))
 		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, receiveTask.getMessageRef());
@@ -74,5 +65,14 @@ public class ReceiveTaskXMLConverter extends BaseBpmnXMLConverter {
 		  xtw.writeAttribute(ATTRIBUTE_INSTANTIATE, receiveTask.getInstantiate().toString());
 	  if (receiveTask.getImplementationType() != null)
 		  xtw.writeAttribute(ATTRIBUTE_TASK_IMPLEMENTATION, receiveTask.getImplementationType().toString());
+  }
+  
+  @Override
+  protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+  }
+
+  @Override
+  protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  
   }
 }

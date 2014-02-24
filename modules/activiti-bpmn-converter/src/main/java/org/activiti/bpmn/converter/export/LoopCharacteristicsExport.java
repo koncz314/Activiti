@@ -17,14 +17,44 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.Activity;
+import org.activiti.bpmn.model.LoopCharacteristics;
 import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
+import org.activiti.bpmn.model.StandardLoopCharacteristics;
 import org.apache.commons.lang3.StringUtils;
 
-public class MultiInstanceExport implements BpmnXMLConstants {
+public class LoopCharacteristicsExport implements BpmnXMLConstants {
 
-  public static void writeMultiInstance(Activity activity, XMLStreamWriter xtw) throws Exception {
-    if (activity.getLoopCharacteristics() != null) {
-      MultiInstanceLoopCharacteristics multiInstanceObject = activity.getLoopCharacteristics();
+	public static void writeLoopCharacteristics(Activity activity, XMLStreamWriter xtw) throws Exception {
+		if (activity.getLoopCharacteristics() != null) {
+			LoopCharacteristics characteristic = activity.getLoopCharacteristics();
+			if (characteristic instanceof MultiInstanceLoopCharacteristics) {
+				writeMultiInstance(characteristic, xtw);
+			}
+			else if (characteristic instanceof StandardLoopCharacteristics) {
+				writeStandard(characteristic, xtw);
+			}
+		}
+	}
+	
+	private static void writeStandard(LoopCharacteristics loopCharacteristic, XMLStreamWriter xtw) throws Exception {
+		StandardLoopCharacteristics standard = (StandardLoopCharacteristics)loopCharacteristic;
+		xtw.writeStartElement(ELEMENT_STANDARD_LOOP);
+		xtw.writeAttribute(ATTRIBUTE_TEST_BEFORE, String.valueOf(standard.isTestBefore()));
+		if (StringUtils.isNotEmpty(standard.getLoopMaximum())) {
+			xtw.writeAttribute(ATTRIBUTE_LOOP_MAXIMUM, standard.getLoopMaximum());
+		}
+		
+		if (StringUtils.isNotEmpty(standard.getLoopCondition())) {
+			xtw.writeStartElement(ELEMENT_LOOP_CONDITION);
+			xtw.writeCData(standard.getLoopCondition());
+			xtw.writeEndElement();
+		}
+		xtw.writeEndElement();
+	}
+	
+  private static void writeMultiInstance(LoopCharacteristics loopCharacteristic, XMLStreamWriter xtw) throws Exception {
+    
+      MultiInstanceLoopCharacteristics multiInstanceObject = (MultiInstanceLoopCharacteristics)loopCharacteristic;
       if (StringUtils.isNotEmpty(multiInstanceObject.getLoopCardinality()) ||
           StringUtils.isNotEmpty(multiInstanceObject.getInputDataItem()) ||
           StringUtils.isNotEmpty(multiInstanceObject.getCompletionCondition())) {
@@ -50,5 +80,5 @@ public class MultiInstanceExport implements BpmnXMLConstants {
         xtw.writeEndElement();
       }
     }
-  }
+  
 }

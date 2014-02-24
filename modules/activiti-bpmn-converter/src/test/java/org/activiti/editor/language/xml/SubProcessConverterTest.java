@@ -9,6 +9,7 @@ import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.ImplementationType;
+import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
 import org.activiti.bpmn.model.StartEvent;
 import org.activiti.bpmn.model.SubProcess;
 import org.activiti.bpmn.model.TimerEventDefinition;
@@ -55,9 +56,9 @@ public class SubProcessConverterTest extends AbstractConverterTest {
     assertTrue(flowElement instanceof SubProcess);
     assertEquals("subprocess1", flowElement.getId());
     SubProcess subProcess = (SubProcess) flowElement;
-    assertTrue(subProcess.getLoopCharacteristics().isSequential());
-    assertEquals("10", subProcess.getLoopCharacteristics().getLoopCardinality());
-    assertEquals("${assignee == \"\"}", subProcess.getLoopCharacteristics().getCompletionCondition());
+    assertTrue(((MultiInstanceLoopCharacteristics)subProcess.getLoopCharacteristics()).isSequential());
+    assertEquals("10", ((MultiInstanceLoopCharacteristics)subProcess.getLoopCharacteristics()).getLoopCardinality());
+    assertEquals("${assignee == \"\"}", ((MultiInstanceLoopCharacteristics)subProcess.getLoopCharacteristics()).getCompletionCondition());
     assertTrue(subProcess.getFlowElements().size() == 5);
     
     assertEquals(1, subProcess.getExecutionListeners().size());

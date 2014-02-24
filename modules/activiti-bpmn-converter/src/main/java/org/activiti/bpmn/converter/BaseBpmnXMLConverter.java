@@ -23,7 +23,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.child.BaseChildElementParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
-import org.activiti.bpmn.converter.export.MultiInstanceExport;
+import org.activiti.bpmn.converter.export.LoopCharacteristicsExport;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.Artifact;
@@ -183,6 +183,15 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
         xtw.writeCharacters(flowElement.getDocumentation());
         xtw.writeEndElement();
       }
+      
+      if (flowElement.getCategoryValueRefs() != null && flowElement.getCategoryValueRefs().size() != 0) {
+    	  for (String categoryValueRef : flowElement.getCategoryValueRefs()) {
+    		  xtw.writeStartElement(ATTRIBUTE_CATEGORY_VALUE_REF);
+    		  xtw.writeCharacters(categoryValueRef);
+    		  xtw.writeEndElement();
+    	  }
+      }
+      
     }
     
     writeExtensionChildElements(baseElement, xtw);
@@ -195,7 +204,7 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
     
     if (baseElement instanceof Activity) {
       final Activity activity = (Activity) baseElement;
-      MultiInstanceExport.writeMultiInstance(activity, xtw);
+      LoopCharacteristicsExport.writeLoopCharacteristics(activity, xtw);
     }
     
     writeAdditionalChildElements(baseElement, xtw);

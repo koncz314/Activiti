@@ -41,19 +41,22 @@ import org.activiti.bpmn.converter.alfresco.AlfrescoUserTaskXMLConverter;
 import org.activiti.bpmn.converter.child.DocumentationParser;
 import org.activiti.bpmn.converter.child.IOSpecificationParser;
 import org.activiti.bpmn.converter.child.MultiInstanceParser;
+import org.activiti.bpmn.converter.child.StandardLoopParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
 import org.activiti.bpmn.converter.export.BPMNDIExport;
+import org.activiti.bpmn.converter.export.CategoryExport;
 import org.activiti.bpmn.converter.export.DefinitionsRootExport;
 import org.activiti.bpmn.converter.export.ErrorExport;
 import org.activiti.bpmn.converter.export.ImportExport;
 import org.activiti.bpmn.converter.export.InterfaceExport;
 import org.activiti.bpmn.converter.export.ItemDefinitionExport;
-import org.activiti.bpmn.converter.export.MultiInstanceExport;
+import org.activiti.bpmn.converter.export.LoopCharacteristicsExport;
 import org.activiti.bpmn.converter.export.PoolExport;
 import org.activiti.bpmn.converter.export.ProcessExport;
 import org.activiti.bpmn.converter.export.SignalAndMessageDefinitionExport;
 import org.activiti.bpmn.converter.parser.BpmnEdgeParser;
 import org.activiti.bpmn.converter.parser.BpmnShapeParser;
+import org.activiti.bpmn.converter.parser.CategoryParser;
 import org.activiti.bpmn.converter.parser.ErrorParser;
 import org.activiti.bpmn.converter.parser.ExtensionElementsParser;
 import org.activiti.bpmn.converter.parser.ImportParser;
@@ -141,11 +144,12 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
     // artifacts
     addConverter(TextAnnotationXMLConverter.getXMLType(), TextAnnotationXMLConverter.getBpmnElementType(), TextAnnotationXMLConverter.class);
     addConverter(AssociationXMLConverter.getXMLType(), AssociationXMLConverter.getBpmnElementType(), AssociationXMLConverter.class);
+    addConverter(GroupXMLConverter.getXMLType(), GroupXMLConverter.getBpmnElementType(), GroupXMLConverter.class);
     
     // Alfresco types
     addConverter(AlfrescoStartEventXMLConverter.getXMLType(), AlfrescoStartEventXMLConverter.getBpmnElementType(), AlfrescoStartEventXMLConverter.class);
     addConverter(AlfrescoUserTaskXMLConverter.getXMLType(), AlfrescoUserTaskXMLConverter.getBpmnElementType(), AlfrescoUserTaskXMLConverter.class);
-  }
+	}
   
   public static void addConverter(String elementName, Class<? extends BaseElement> elementClass, 
       Class<? extends BaseBpmnXMLConverter> converter) {
@@ -298,7 +302,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
           
 				} else if (ELEMENT_ERROR.equals(xtr.getLocalName())) {
           new ErrorParser().parse(xtr, model);
-				
+          
           
 				} else if (ELEMENT_IMPORT.equals(xtr.getLocalName())) {
 				  new ImportParser().parse(xtr, model);
@@ -309,6 +313,9 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 				} else if (ELEMENT_INTERFACE.equals(xtr.getLocalName())) {
 				  new InterfaceParser().parse(xtr, model);
 				  
+				} else if(ELEMENT_CATEGORY.equals(xtr.getLocalName())) {
+					new CategoryParser().parse(xtr, model);
+					
 				} else if (ELEMENT_IOSPECIFICATION.equals(xtr.getLocalName())) {
           new IOSpecificationParser().parseChildElement(xtr, activeProcess, model);
 					
@@ -381,7 +388,11 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 						
 						new MultiInstanceParser().parseChildElement(xtr, activeSubProcessList.get(activeSubProcessList.size() - 1), model);
 					  
-					} else if (convertersToBpmnMap.containsKey(xtr.getLocalName())) {
+					} else if(activeSubProcessList.size() > 0 && ELEMENT_STANDARD_LOOP.equalsIgnoreCase(xtr.getLocalName())) {
+						new StandardLoopParser().parseChildElement(xtr, activeSubProcessList.get(activeSubProcessList.size() - 1), model);
+					}
+					
+					else if (convertersToBpmnMap.containsKey(xtr.getLocalName())) {
 					  if (activeProcess != null) {
   					  Class<? extends BaseBpmnXMLConverter> converterClass = convertersToBpmnMap.get(xtr.getLocalName());
   					  BaseBpmnXMLConverter converter = converterClass.newInstance();
@@ -477,7 +488,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       SignalAndMessageDefinitionExport.writeSignalsAndMessages(model, xtw);
       ErrorExport.writeErrors(model, xtw);
       InterfaceExport.writeInterfaces(model, xtw);
-      
+      CategoryExport.writeCategories(model, xtw);
       
       PoolExport.writePools(model, xtw);
       
@@ -551,7 +562,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         // closing extensions element
         xtw.writeEndElement();
       }
-      MultiInstanceExport.writeMultiInstance(subProcess, xtw);
+      LoopCharacteristicsExport.writeLoopCharacteristics(subProcess, xtw);
       
       for (FlowElement subElement : subProcess.getFlowElements()) {
         createXML(subElement, model, xtw);

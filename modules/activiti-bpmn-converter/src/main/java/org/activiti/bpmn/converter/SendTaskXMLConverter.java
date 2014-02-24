@@ -20,7 +20,6 @@ import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ImplementationType;
-import org.activiti.bpmn.model.MessageEventDefinition;
 import org.activiti.bpmn.model.SendTask;
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,6 +68,13 @@ public class SendTaskXMLConverter extends BaseBpmnXMLConverter {
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
     
     SendTask sendTask = (SendTask) element;
+    if (StringUtils.isNotEmpty(sendTask.getMessageRef()))
+		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, sendTask.getMessageRef());
+	  if (StringUtils.isNotEmpty(sendTask.getOperationRef()))
+		  xtw.writeAttribute(ATTRIBUTE_TASK_OPERATION_REF, sendTask.getOperationRef());
+	  if (sendTask.getImplementationType() != null)
+		  xtw.writeAttribute(ATTRIBUTE_TASK_IMPLEMENTATION, sendTask.getImplementationType().toString());
+    
     
     if (StringUtils.isNotEmpty(sendTask.getType())) {
       writeQualifiedAttribute(ATTRIBUTE_TYPE, sendTask.getType(), xtw);
@@ -83,15 +89,7 @@ public class SendTaskXMLConverter extends BaseBpmnXMLConverter {
   
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-	  SendTask sendTask = (SendTask)element;
-	  if (StringUtils.isNotEmpty(sendTask.getMessageRef()))
-		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, sendTask.getMessageRef());
-	  if (StringUtils.isNotEmpty(sendTask.getOperationRef()))
-		  xtw.writeAttribute(ATTRIBUTE_TASK_OPERATION_REF, sendTask.getOperationRef());
-	  if (sendTask.getImplementationType() != null)
-		  xtw.writeAttribute(ATTRIBUTE_TASK_IMPLEMENTATION, sendTask.getImplementationType().toString());
-  
-	  
+	 
   }
   
   protected String parseOperationRef(String operationRef, BpmnModel model) {

@@ -17,6 +17,7 @@ import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.child.ActivitiEventListenerParser;
 import org.activiti.bpmn.converter.child.BaseChildElementParser;
 import org.activiti.bpmn.converter.child.CancelEventDefinitionParser;
+import org.activiti.bpmn.converter.child.CategoryValueRefParser;
 import org.activiti.bpmn.converter.child.CompensateEventDefinitionParser;
 import org.activiti.bpmn.converter.child.ConditionExpressionParser;
 import org.activiti.bpmn.converter.child.DataInputAssociationParser;
@@ -31,6 +32,7 @@ import org.activiti.bpmn.converter.child.IOSpecificationParser;
 import org.activiti.bpmn.converter.child.MessageEventDefinitionParser;
 import org.activiti.bpmn.converter.child.MultiInstanceParser;
 import org.activiti.bpmn.converter.child.SignalEventDefinitionParser;
+import org.activiti.bpmn.converter.child.StandardLoopParser;
 import org.activiti.bpmn.converter.child.TaskListenerParser;
 import org.activiti.bpmn.converter.child.TerminateEventDefinitionParser;
 import org.activiti.bpmn.converter.child.TimeCycleParser;
@@ -42,6 +44,7 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ExtensionAttribute;
 import org.activiti.bpmn.model.ExtensionElement;
 import org.activiti.bpmn.model.GraphicInfo;
+import org.activiti.bpmn.model.StandardLoopCharacteristics;
 import org.apache.commons.lang3.StringUtils;
 
 public class BpmnXMLUtil implements BpmnXMLConstants {
@@ -63,6 +66,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     addGenericParser(new IOSpecificationParser());
     addGenericParser(new MessageEventDefinitionParser());
     addGenericParser(new MultiInstanceParser());
+    addGenericParser(new StandardLoopParser());
     addGenericParser(new SignalEventDefinitionParser());
     addGenericParser(new TaskListenerParser());
     addGenericParser(new TerminateEventDefinitionParser());
@@ -71,6 +75,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     addGenericParser(new TimeCycleParser());
     addGenericParser(new TimeDurationParser());
     addGenericParser(new FlowNodeRefParser());
+    addGenericParser(new CategoryValueRefParser());
   }
   
   private static void addGenericParser(BaseChildElementParser parser) {
@@ -104,6 +109,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     boolean inExtensionElements = false;
     boolean readyWithChildElements = false;
     while (readyWithChildElements == false && xtr.hasNext()) {
+    	
       xtr.next();
       if (xtr.isStartElement()) {
         if (ELEMENT_EXTENSIONS.equals(xtr.getLocalName())) {

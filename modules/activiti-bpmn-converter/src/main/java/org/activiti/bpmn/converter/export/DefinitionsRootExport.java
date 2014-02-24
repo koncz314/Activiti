@@ -40,6 +40,7 @@ public class DefinitionsRootExport implements BpmnXMLConstants {
     xtw.writeNamespace(BPMNDI_PREFIX, BPMNDI_NAMESPACE);
     xtw.writeNamespace(OMGDC_PREFIX, OMGDC_NAMESPACE);
     xtw.writeNamespace(OMGDI_PREFIX, OMGDI_NAMESPACE);
+    //xtw.writeNamespace(XSD_PREFIX, SCHEMA_NAMESPACE);
     for ( String prefix : model.getNamespaces().keySet()) {
       if (!defaultNamespaces.contains(prefix))
         xtw.writeNamespace( prefix, model.getNamespaces().get(prefix));
