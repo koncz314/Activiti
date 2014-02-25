@@ -18,7 +18,10 @@ import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.DataSpec;
+import org.activiti.bpmn.model.DataInput;
+import org.activiti.bpmn.model.DataInputSet;
+import org.activiti.bpmn.model.DataOutput;
+import org.activiti.bpmn.model.DataOutputSet;
 import org.activiti.bpmn.model.IOSpecification;
 import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SendTask;
@@ -37,43 +40,70 @@ public class IOSpecificationParser extends BaseChildElementParser {
   
   public void parseChildElement(XMLStreamReader xtr, BaseElement parentElement, BpmnModel model) throws Exception {
     
-    if (parentElement instanceof ServiceTask == false && parentElement instanceof SendTask == false && 
+    /*if (parentElement instanceof ServiceTask == false && parentElement instanceof SendTask == false && 
         parentElement instanceof SubProcess == false && parentElement instanceof Process == false) return;
-    
+    */
+	  
+	  if (parentElement instanceof Activity == false && 
+		        parentElement instanceof SubProcess == false && parentElement instanceof Process == false) return;
     IOSpecification ioSpecification = new IOSpecification();
     BpmnXMLUtil.addXMLLocation(ioSpecification, xtr);
     boolean readyWithIOSpecification = false;
+    System.out.println("IOSPEC PARSE " + parentElement);
     try {
       while (readyWithIOSpecification == false && xtr.hasNext()) {
         xtr.next();
         if (xtr.isStartElement() && ELEMENT_DATA_INPUT.equalsIgnoreCase(xtr.getLocalName())) {
-          DataSpec dataSpec = new DataSpec();
+          DataInput dataSpec = new DataInput();
           BpmnXMLUtil.addXMLLocation(dataSpec, xtr);
           dataSpec.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
           dataSpec.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
-          dataSpec.setItemSubjectRef(parseItemSubjectRef(xtr.getAttributeValue(null, ATTRIBUTE_DATA_SUBJECT_REF), model));
+          dataSpec.setItemSubjectRef(xtr.getAttributeValue(null, ATTRIBUTE_DATA_SUBJECT_REF));
           ioSpecification.getDataInputs().add(dataSpec);
 
         } else if (xtr.isStartElement() && ELEMENT_DATA_OUTPUT.equalsIgnoreCase(xtr.getLocalName())) {
-          DataSpec dataSpec = new DataSpec();
+          DataOutput dataSpec = new DataOutput();
           BpmnXMLUtil.addXMLLocation(dataSpec, xtr);
           dataSpec.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
           dataSpec.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
-          dataSpec.setItemSubjectRef(parseItemSubjectRef(xtr.getAttributeValue(null, ATTRIBUTE_DATA_SUBJECT_REF), model));
+          dataSpec.setItemSubjectRef(xtr.getAttributeValue(null, ATTRIBUTE_DATA_SUBJECT_REF));
           ioSpecification.getDataOutputs().add(dataSpec);
           
-        } else if (xtr.isStartElement() && ELEMENT_DATA_INPUT_REFS.equalsIgnoreCase(xtr.getLocalName())) {
-          String dataInputRefs = xtr.getElementText();
-          if (StringUtils.isNotEmpty(dataInputRefs)) {
-            ioSpecification.getDataInputRefs().add(dataInputRefs.trim());
-          }
-          
-        } else if (xtr.isStartElement() && ELEMENT_DATA_OUTPUT_REFS.equalsIgnoreCase(xtr.getLocalName())) {
-          String dataOutputRefs = xtr.getElementText();
-          if (StringUtils.isNotEmpty(dataOutputRefs)) {
-            ioSpecification.getDataOutputRefs().add(dataOutputRefs.trim());
-          }
-          
+        } else if (xtr.isStartElement() && ELEMENT_DATA_INPUTSET.equalsIgnoreCase(xtr.getLocalName())) {
+        	DataInputSet inputSet = new DataInputSet();
+        	boolean readyWithInputSet = false;
+        	while (readyWithInputSet == false && xtr.hasNext()) {
+        		xtr.next();
+        		if (xtr.isStartElement() && ELEMENT_DATA_INPUT_REFS.equalsIgnoreCase(xtr.getLocalName())) {
+        			String dataInputRefs = xtr.getElementText();
+        			System.out.println(dataInputRefs);
+        			if (StringUtils.isNotEmpty(dataInputRefs)) {
+        				inputSet.getDataInputRefs().add(dataInputRefs);
+        			}
+        			
+        		} if (xtr.isEndElement() && ELEMENT_DATA_INPUTSET.equalsIgnoreCase(xtr.getLocalName())) {
+        			readyWithInputSet = true;
+        			ioSpecification.setDataInputSet(inputSet);
+        		}
+        	}
+        	
+        } else if (xtr.isStartElement() && ELEMENT_DATA_OUTPUTSET.equalsIgnoreCase(xtr.getLocalName())) {
+        	DataOutputSet outputSet = new DataOutputSet();
+        	boolean readyWithOutputSet = false;
+        	while (readyWithOutputSet == false && xtr.hasNext()) {
+        		xtr.next();
+        		if (xtr.isStartElement() && ELEMENT_DATA_OUTPUT_REFS.equalsIgnoreCase(xtr.getLocalName())) {
+        			String dataOutputRefs = xtr.getElementText();
+        			System.out.println("DATA OUTPUT REFS: "+dataOutputRefs);
+        			if (StringUtils.isNotEmpty(dataOutputRefs)) {
+        				outputSet.getDataOutputRefs().add(dataOutputRefs);
+        			}
+        			
+        		} if (xtr.isEndElement() && ELEMENT_DATA_OUTPUTSET.equalsIgnoreCase(xtr.getLocalName())) {
+        			readyWithOutputSet = true;
+        			ioSpecification.setDataOutputSet(outputSet);
+        		}
+        	}
         } else if (xtr.isEndElement() && getElementName().equalsIgnoreCase(xtr.getLocalName())) {
           readyWithIOSpecification = true;
         }

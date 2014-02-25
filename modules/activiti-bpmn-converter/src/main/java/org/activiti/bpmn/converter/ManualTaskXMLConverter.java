@@ -22,7 +22,7 @@ import org.activiti.bpmn.model.ManualTask;
 /**
  * @author Tijs Rademakers
  */
-public class ManualTaskXMLConverter extends BaseBpmnXMLConverter {
+public class ManualTaskXMLConverter extends ActivityXMLConverter {
 
   public static String getXMLType() {
     return ELEMENT_TASK_MANUAL;
@@ -55,6 +55,6 @@ public class ManualTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    
+    super.writeAdditionalChildElements(element, xtw);
   }
 }

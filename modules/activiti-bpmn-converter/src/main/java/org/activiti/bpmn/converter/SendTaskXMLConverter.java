@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Tijs Rademakers
  * @author Krisztian Koncz (krisztian.koncz@clickandlike.hu
  */
-public class SendTaskXMLConverter extends BaseBpmnXMLConverter {
+public class SendTaskXMLConverter extends ActivityXMLConverter {
   
   public static String getXMLType() {
     return ELEMENT_TASK_SEND;
@@ -89,7 +89,7 @@ public class SendTaskXMLConverter extends BaseBpmnXMLConverter {
   
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-	 
+	 super.writeAdditionalChildElements(element, xtw);
   }
   
   protected String parseOperationRef(String operationRef, BpmnModel model) {

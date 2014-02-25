@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class ScriptTaskXMLConverter extends BaseBpmnXMLConverter {
+public class ScriptTaskXMLConverter extends ActivityXMLConverter {
   
 	public ScriptTaskXMLConverter() {
 		ScriptTextParser scriptTextParser = new ScriptTextParser();
@@ -75,11 +75,13 @@ public class ScriptTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    ScriptTask scriptTask = (ScriptTask) element;
+    super.writeAdditionalChildElements(element, xtw);
+	  ScriptTask scriptTask = (ScriptTask) element;
     if (StringUtils.isNotEmpty(scriptTask.getScript())) {
       xtw.writeStartElement(ATTRIBUTE_TASK_SCRIPT_TEXT);
       xtw.writeCharacters(scriptTask.getScript());
       xtw.writeEndElement();
     }
+    
   }
 }

@@ -1,18 +1,11 @@
 package org.activiti.bpmn.model;
 
 
-public class DataSpec extends BaseElement {
+public class DataObject extends FlowElement {
   
-  protected String name;
   protected String itemSubjectRef;
-  protected boolean isCollection;
+  protected boolean isCollection = false;
   
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
   public String getItemSubjectRef() {
     return itemSubjectRef;
   }
@@ -26,14 +19,14 @@ public class DataSpec extends BaseElement {
     this.isCollection = isCollection;
   }
   
-  public DataSpec clone() {
-    DataSpec clone = new DataSpec();
+  public DataObject clone() {
+    DataObject clone = new DataObject();
     clone.setValues(this);
     return clone;
   }
   
-  public void setValues(DataSpec otherDataSpec) {
-    setName(otherDataSpec.getName());
+  public void setValues(DataObject otherDataSpec) {
+    super.setValues((FlowElement)otherDataSpec);
     setItemSubjectRef(otherDataSpec.getItemSubjectRef());
     setCollection(otherDataSpec.isCollection());
   }

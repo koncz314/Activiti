@@ -17,6 +17,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.converter.export.FieldExtensionExport;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
+import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.CustomProperty;
@@ -27,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class ServiceTaskXMLConverter extends BaseBpmnXMLConverter {
+public class ServiceTaskXMLConverter extends ActivityXMLConverter {
   
   public static String getXMLType() {
     return ELEMENT_TASK_SERVICE;
@@ -141,6 +142,7 @@ public class ServiceTaskXMLConverter extends BaseBpmnXMLConverter {
   
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalChildElements(element, xtw);
   }
   
   protected String parseOperationRef(String operationRef, BpmnModel model) {

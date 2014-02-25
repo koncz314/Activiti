@@ -14,7 +14,9 @@ package org.activiti.bpmn.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,11 +24,32 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class SubProcess extends Activity implements FlowElementsContainer {
+public class SubProcess extends Activity implements FlowElementsContainer, DataObjectContainer {
 
   protected List<FlowElement> flowElementList = new ArrayList<FlowElement>();
   protected List<Artifact> artifactList = new ArrayList<Artifact>();
-
+  protected Map<String,DataObject> dataObjectMap = new LinkedHashMap<String, DataObject>();
+  
+  public void addDataObject(DataObject data) {
+	  dataObjectMap.put(data.getId(), data);
+  }
+  
+  public boolean containsDataObject(DataObject data) {
+	  return dataObjectMap.containsKey(data.getId());
+  }
+  
+  public DataObject getDataObject(String id) {
+	  return dataObjectMap.get(id);
+  }
+  
+  public Collection<DataObject> getAllDataObjects() {
+	  return dataObjectMap.values();
+  }
+  
+  public Collection<String> getDataObjectIds() {
+	  return dataObjectMap.keySet();
+  }
+  
   public FlowElement getFlowElement(String id) {
     FlowElement foundElement = null;
     if (StringUtils.isNotEmpty(id)) {  
@@ -90,7 +113,7 @@ public class SubProcess extends Activity implements FlowElementsContainer {
   public void setValues(SubProcess otherElement) {
     super.setValues(otherElement);
     
-    /*flowElementList = new ArrayList<FlowElement>();
+    flowElementList = new ArrayList<FlowElement>();
     if (otherElement.getFlowElements() != null && otherElement.getFlowElements().size() > 0) {
       for (FlowElement element : otherElement.getFlowElements()) {
         flowElementList.add(element.clone());
@@ -102,6 +125,10 @@ public class SubProcess extends Activity implements FlowElementsContainer {
       for (Artifact artifact : otherElement.getArtifacts()) {
         artifactList.add(artifact.clone());
       }
-    }*/
+    }
+    dataObjectMap = new LinkedHashMap<String, DataObject>();
+    for (DataObject data : otherElement.getAllDataObjects()) {
+    	dataObjectMap.put(data.getId(), data.clone());
+    }
   }
 }

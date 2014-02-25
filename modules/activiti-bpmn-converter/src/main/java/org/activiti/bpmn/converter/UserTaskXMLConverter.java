@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers, Saeid Mirzaei
  */
-public class UserTaskXMLConverter extends BaseBpmnXMLConverter {
+public class UserTaskXMLConverter extends ActivityXMLConverter {
   
   List<String> formTypes = new ArrayList<String>();
 
@@ -132,6 +132,7 @@ public class UserTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalChildElements(element, xtw);
   }
   
   public void addFormType(String formType) {

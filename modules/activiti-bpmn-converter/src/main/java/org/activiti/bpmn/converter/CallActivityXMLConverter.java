@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class CallActivityXMLConverter extends BaseBpmnXMLConverter {
+public class CallActivityXMLConverter extends ActivityXMLConverter {
   
   public CallActivityXMLConverter() {
   	InParameterParser inParameterParser = new InParameterParser();
@@ -76,6 +76,7 @@ public class CallActivityXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalChildElements(element, xtw);
   }
   
   private void writeIOParameters(String elementName, List<IOParameter> parameterList, XMLStreamWriter xtw) throws Exception {

@@ -44,7 +44,6 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ExtensionAttribute;
 import org.activiti.bpmn.model.ExtensionElement;
 import org.activiti.bpmn.model.GraphicInfo;
-import org.activiti.bpmn.model.StandardLoopCharacteristics;
 import org.apache.commons.lang3.StringUtils;
 
 public class BpmnXMLUtil implements BpmnXMLConstants {
@@ -76,6 +75,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     addGenericParser(new TimeDurationParser());
     addGenericParser(new FlowNodeRefParser());
     addGenericParser(new CategoryValueRefParser());
+    //addGenericParser(new DataObjectParser());
   }
   
   private static void addGenericParser(BaseChildElementParser parser) {
@@ -179,6 +179,14 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     if (StringUtils.isNotEmpty(value)) {
       xtw.writeAttribute(ACTIVITI_EXTENSIONS_PREFIX, ACTIVITI_EXTENSIONS_NAMESPACE, attributeName, value);
     }
+  }
+  
+  public static void writeElementWithText(String elementName, String value, XMLStreamWriter xtw) throws Exception {
+	  if (StringUtils.isNotEmpty(value) && "null".equalsIgnoreCase(value) == false) {
+	      xtw.writeStartElement(elementName);
+	      xtw.writeCharacters(value);
+	      xtw.writeEndElement();
+	    }
   }
   
   public static boolean writeExtensionElements(BaseElement baseElement, boolean didWriteExtensionStartElement, XMLStreamWriter xtw) throws Exception {

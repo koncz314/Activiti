@@ -14,12 +14,14 @@ package org.activiti.bpmn.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Tijs Rademakers
  */
-public class Process extends BaseElement implements FlowElementsContainer, HasExecutionListeners {
+public class Process extends BaseElement implements FlowElementsContainer, HasExecutionListeners, DataObjectContainer {
 
   protected String name;
   protected boolean executable = true;
@@ -32,7 +34,7 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
   protected List<String> candidateStarterUsers = new ArrayList<String>();
   protected List<String> candidateStarterGroups = new ArrayList<String>();
   protected List<EventListener> eventListeners = new ArrayList<EventListener>();
-
+  protected Map<String,DataObject> dataObjectMap = new LinkedHashMap<String, DataObject>();
   public String getDocumentation() {
     return documentation;
   }
@@ -188,6 +190,26 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     return foundFlowElements;
   }
   
+  public void addDataObject(DataObject data) {
+	  dataObjectMap.put(data.getId(), data);
+  }
+  
+  public boolean containsDataObject(DataObject data) {
+	  return dataObjectMap.containsKey(data.getId());
+  }
+  
+  public DataObject getDataObject(String id) {
+	  return dataObjectMap.get(id);
+  }
+  
+  public Collection<DataObject> getAllDataObjects() {
+	  return dataObjectMap.values();
+  }
+  
+  public Collection<String> getDataObjectIds() {
+	  return dataObjectMap.keySet();
+  }
+  
   public Process clone() {
     Process clone = new Process();
     clone.setValues(this);
@@ -227,5 +249,10 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     		eventListeners.add(listener.clone());
     	}
     }
+    dataObjectMap = new LinkedHashMap<String, DataObject>();
+    for (DataObject data : otherElement.getAllDataObjects()) {
+    	dataObjectMap.put(data.getId(), data.clone());
+    }
+    
   }
 }

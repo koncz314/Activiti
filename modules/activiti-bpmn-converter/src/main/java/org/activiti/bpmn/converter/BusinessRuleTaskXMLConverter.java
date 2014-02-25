@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class BusinessRuleTaskXMLConverter extends BaseBpmnXMLConverter {
+public class BusinessRuleTaskXMLConverter extends ActivityXMLConverter {
   
 	public static String getXMLType() {
     return ELEMENT_TASK_BUSINESSRULE;
@@ -82,5 +82,6 @@ public class BusinessRuleTaskXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalChildElements(element, xtw);
   }
 }

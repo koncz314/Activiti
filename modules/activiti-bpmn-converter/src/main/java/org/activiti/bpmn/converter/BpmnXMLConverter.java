@@ -38,6 +38,7 @@ import javax.xml.validation.Validator;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.alfresco.AlfrescoStartEventXMLConverter;
 import org.activiti.bpmn.converter.alfresco.AlfrescoUserTaskXMLConverter;
+import org.activiti.bpmn.converter.child.DataObjectParser;
 import org.activiti.bpmn.converter.child.DocumentationParser;
 import org.activiti.bpmn.converter.child.IOSpecificationParser;
 import org.activiti.bpmn.converter.child.MultiInstanceParser;
@@ -45,6 +46,7 @@ import org.activiti.bpmn.converter.child.StandardLoopParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
 import org.activiti.bpmn.converter.export.BPMNDIExport;
 import org.activiti.bpmn.converter.export.CategoryExport;
+import org.activiti.bpmn.converter.export.DataObjectExport;
 import org.activiti.bpmn.converter.export.DefinitionsRootExport;
 import org.activiti.bpmn.converter.export.ErrorExport;
 import org.activiti.bpmn.converter.export.ImportExport;
@@ -78,6 +80,7 @@ import org.activiti.bpmn.model.Association;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.DataObject;
 import org.activiti.bpmn.model.EventSubProcess;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.FlowNode;
@@ -283,7 +286,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 
 				if (xtr.isStartElement() == false)
 					continue;
-
+				
 				if (ELEMENT_DEFINITIONS.equals(xtr.getLocalName())) {
 
 					model.setTargetNamespace(xtr.getAttributeValue(null, TARGET_NAMESPACE_ATTRIBUTE));
@@ -335,9 +338,15 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 				  Process process = new ProcessParser().parse(xtr, model);
 				  if (process != null) {
             activeProcess = process;	
+				  } 
+				  
+				} else if (ELEMENT_DATA_OBJECT.equals(xtr.getLocalName())) {
+					BaseElement parentElement = activeSubProcessList.size() > 0 ? activeSubProcessList.get(activeSubProcessList.size()-1) :
+						activeProcess;
+					new DataObjectParser().parseChildElement(xtr, parentElement, model);
+					  
 				  }
-				
-				} else if (ELEMENT_POTENTIAL_STARTER.equals(xtr.getLocalName())) {
+				else if (ELEMENT_POTENTIAL_STARTER.equals(xtr.getLocalName())) {
 				  new PotentialStarterParser().parse(xtr, activeProcess);
 				  
 				} else if (ELEMENT_LANE.equals(xtr.getLocalName())) {
@@ -501,6 +510,10 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       
         ProcessExport.writeProcess(process, xtw);
         
+        for (DataObject data : process.getAllDataObjects()) {
+          	DataObjectExport.writeDataObject(data, xtw);
+          }
+        
         for (FlowElement flowElement : process.getFlowElements()) {
           createXML(flowElement, model, xtw);
         }
@@ -563,6 +576,10 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         xtw.writeEndElement();
       }
       LoopCharacteristicsExport.writeLoopCharacteristics(subProcess, xtw);
+      
+      for (DataObject data : subProcess.getAllDataObjects()) {
+      	DataObjectExport.writeDataObject(data, xtw);
+      }
       
       for (FlowElement subElement : subProcess.getFlowElements()) {
         createXML(subElement, model, xtw);

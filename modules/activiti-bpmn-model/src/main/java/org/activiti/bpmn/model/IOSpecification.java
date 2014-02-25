@@ -5,24 +5,26 @@ import java.util.List;
 
 public class IOSpecification extends BaseElement {
 
-  protected List<DataSpec> dataInputs = new ArrayList<DataSpec>();
-  protected List<DataSpec> dataOutputs = new ArrayList<DataSpec>();
-  protected List<String> dataInputRefs = new ArrayList<String>();
-  protected List<String> dataOutputRefs = new ArrayList<String>();
+  protected List<DataInput> dataInputs = new ArrayList<DataInput>();
+  protected List<DataOutput> dataOutputs = new ArrayList<DataOutput>();
+  protected DataInputSet dataInputSet = new DataInputSet();
+  protected DataOutputSet dataOutputSet = new DataOutputSet();
+  //protected List<String> dataInputRefs = new ArrayList<String>();
+  //protected List<String> dataOutputRefs = new ArrayList<String>();
   
-  public List<DataSpec> getDataInputs() {
+  public List<DataInput> getDataInputs() {
     return dataInputs;
   }
-  public void setDataInputs(List<DataSpec> dataInputs) {
+  public void setDataInputs(List<DataInput> dataInputs) {
     this.dataInputs = dataInputs;
   }
-  public List<DataSpec> getDataOutputs() {
+  public List<DataOutput> getDataOutputs() {
     return dataOutputs;
   }
-  public void setDataOutputs(List<DataSpec> dataOutputs) {
+  public void setDataOutputs(List<DataOutput> dataOutputs) {
     this.dataOutputs = dataOutputs;
   }
-  public List<String> getDataInputRefs() {
+  /*public List<String> getDataInputRefs() {
     return dataInputRefs;
   }
   public void setDataInputRefs(List<String> dataInputRefs) {
@@ -33,30 +35,42 @@ public class IOSpecification extends BaseElement {
   }
   public void setDataOutputRefs(List<String> dataOutputRefs) {
     this.dataOutputRefs = dataOutputRefs;
-  }
+  }*/
   
-  public IOSpecification clone() {
+  public DataInputSet getDataInputSet() {
+	return dataInputSet;
+}
+public void setDataInputSet(DataInputSet dataInputSet) {
+	this.dataInputSet = dataInputSet;
+}
+public DataOutputSet getDataOutputSet() {
+	return dataOutputSet;
+}
+public void setDataOutputSet(DataOutputSet dataOutputSet) {
+	this.dataOutputSet = dataOutputSet;
+}
+public IOSpecification clone() {
     IOSpecification clone = new IOSpecification();
     clone.setValues(this);
     return clone;
   }
   
   public void setValues(IOSpecification otherSpec) {
-    dataInputs = new ArrayList<DataSpec>();
+    dataInputs = new ArrayList<DataInput>();
     if (otherSpec.getDataInputs() != null && otherSpec.getDataInputs().size() > 0) {
-      for (DataSpec dataSpec : otherSpec.getDataInputs()) {
+      for (DataInput dataSpec : otherSpec.getDataInputs()) {
         dataInputs.add(dataSpec.clone());
       }
     }
     
-    dataOutputs = new ArrayList<DataSpec>();
+    dataOutputs = new ArrayList<DataOutput>();
     if (otherSpec.getDataOutputs() != null && otherSpec.getDataOutputs().size() > 0) {
-      for (DataSpec dataSpec : otherSpec.getDataOutputs()) {
+      for (DataOutput dataSpec : otherSpec.getDataOutputs()) {
         dataOutputs.add(dataSpec.clone());
       }
     }
     
-    dataInputRefs = new ArrayList<String>(otherSpec.getDataInputRefs());
-    dataOutputRefs = new ArrayList<String>(otherSpec.getDataOutputRefs());
+    setDataInputSet(otherSpec.getDataInputSet().clone());
+    setDataOutputSet(otherSpec.getDataOutputSet().clone());
   }
 }
