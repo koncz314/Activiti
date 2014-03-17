@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class BoundaryEventXMLConverter extends BaseBpmnXMLConverter {
+public class BoundaryEventXMLConverter extends CatchEventXMLConverter {
   
   public static String getXMLType() {
     return ELEMENT_EVENT_BOUNDARY;
@@ -67,7 +67,8 @@ public class BoundaryEventXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    BoundaryEvent boundaryEvent = (BoundaryEvent) element;
+    super.writeAdditionalAttributes(element, xtw);
+	  BoundaryEvent boundaryEvent = (BoundaryEvent) element;
     if (boundaryEvent.getAttachedToRef() != null) {
       writeDefaultAttribute(ATTRIBUTE_BOUNDARY_ATTACHEDTOREF, boundaryEvent.getAttachedToRef().getId(), xtw);
     }
@@ -87,7 +88,6 @@ public class BoundaryEventXMLConverter extends BaseBpmnXMLConverter {
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    BoundaryEvent boundaryEvent = (BoundaryEvent) element;
-    writeEventDefinitions(boundaryEvent, boundaryEvent.getEventDefinitions(), xtw);
+    super.writeAdditionalChildElements(element, xtw);
   }
 }

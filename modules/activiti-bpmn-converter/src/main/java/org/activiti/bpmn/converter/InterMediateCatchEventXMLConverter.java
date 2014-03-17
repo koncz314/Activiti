@@ -17,45 +17,46 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.ManualTask;
+import org.activiti.bpmn.model.IntermediateCatchEvent;
 
 /**
  * @author Tijs Rademakers
  */
-public class ManualTaskXMLConverter extends ActivityXMLConverter {
-
+public class InterMediateCatchEventXMLConverter extends CatchEventXMLConverter {
+  
   public static String getXMLType() {
-    return ELEMENT_TASK_MANUAL;
+    return ELEMENT_EVENT_CATCH;
   }
   
   public static Class<? extends BaseElement> getBpmnElementType() {
-    return ManualTask.class;
+    return IntermediateCatchEvent.class;
   }
   
   @Override
   protected String getXMLElementName() {
-    return ELEMENT_TASK_MANUAL;
+    return ELEMENT_EVENT_CATCH;
   }
   
   @Override
   protected BaseElement convertXMLToElement(XMLStreamReader xtr) throws Exception {
-    ManualTask manualTask = new ManualTask();
-    BpmnXMLUtil.addXMLLocation(manualTask, xtr);
-    parseChildElements(getXMLElementName(), manualTask, xtr);
-    return manualTask;
+    IntermediateCatchEvent catchEvent = new IntermediateCatchEvent();
+    BpmnXMLUtil.addXMLLocation(catchEvent, xtr);
+    parseChildElements(getXMLElementName(), catchEvent, xtr);
+    return catchEvent;
   }
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-	  super.writeAdditionalAttributes(element, xtw);
+    super.writeAdditionalAttributes(element, xtw);
   }
   
   @Override
   protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  
   }
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    super.writeAdditionalChildElements(element, xtw);
+	  super.writeAdditionalChildElements(element, xtw);
   }
 }

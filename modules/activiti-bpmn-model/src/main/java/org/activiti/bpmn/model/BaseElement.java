@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class BaseElement implements HasExtensionAttributes {
   
   protected String id;
+  protected String documentation;
   protected int xmlRowNumber;
   protected int xmlColumnNumber;
   protected Map<String, List<ExtensionElement>> extensionElements = new LinkedHashMap<String, List<ExtensionElement>>();
@@ -39,7 +40,15 @@ public abstract class BaseElement implements HasExtensionAttributes {
     this.id = id;
   }
 
-  public int getXmlRowNumber() {
+  public String getDocumentation() {
+	return documentation;
+}
+
+public void setDocumentation(String documentation) {
+	this.documentation = documentation;
+}
+
+public int getXmlRowNumber() {
     return xmlRowNumber;
   }
 
@@ -110,7 +119,7 @@ public abstract class BaseElement implements HasExtensionAttributes {
   
   public void setValues(BaseElement otherElement) {
     setId(otherElement.getId());
-    
+    setDocumentation(otherElement.getDocumentation());
     extensionElements = new LinkedHashMap<String, List<ExtensionElement>>();
     if (otherElement.getExtensionElements() != null && otherElement.getExtensionElements().size() > 0) {
       for (String key : otherElement.getExtensionElements().keySet()) {

@@ -19,8 +19,8 @@ import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.DataAssociation;
-import org.activiti.bpmn.model.SendTask;
-import org.activiti.bpmn.model.ServiceTask;
+import org.activiti.bpmn.model.IOSpecification;
+import org.activiti.bpmn.model.ThrowEvent;
 
 /**
  * @author Tijs Rademakers
@@ -33,12 +33,18 @@ public class DataInputAssociationParser extends BaseChildElementParser {
   
   public void parseChildElement(XMLStreamReader xtr, BaseElement parentElement, BpmnModel model) throws Exception {
     
-    if (parentElement instanceof ServiceTask == false && parentElement instanceof SendTask == false) return;
+	  if (parentElement instanceof IOSpecification == false && parentElement instanceof ThrowEvent == false) {
+			return;
+		}
     
     DataAssociation dataAssociation = new DataAssociation();
     BpmnXMLUtil.addXMLLocation(dataAssociation, xtr);
     DataAssociationParser.parseDataAssociation(dataAssociation, getElementName(), xtr);
     
-    ((Activity) parentElement).getDataOutputAssociations().add(dataAssociation);
+    if (parentElement instanceof Activity) {
+    	((Activity) parentElement).getDataInputAssociations().add(dataAssociation);
+    } else if (parentElement instanceof ThrowEvent) {
+    	((ThrowEvent) parentElement).getDataInputAssociations().add(dataAssociation);
+    }
   }
 }

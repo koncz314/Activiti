@@ -27,11 +27,15 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public class StartEventXMLConverter extends BaseBpmnXMLConverter {
+public class StartEventXMLConverter extends CatchEventXMLConverter {
   
   List<String> formTypes = new ArrayList<String>();
   
-  public static String getXMLType() {
+  public StartEventXMLConverter() {
+	super();
+}
+
+public static String getXMLType() {
     return ELEMENT_EVENT_START;
   }
   
@@ -67,21 +71,24 @@ public class StartEventXMLConverter extends BaseBpmnXMLConverter {
   
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    StartEvent startEvent = (StartEvent) element;
+    super.writeAdditionalAttributes(element, xtw);
+	StartEvent startEvent = (StartEvent) element;
     writeQualifiedAttribute(ATTRIBUTE_EVENT_START_INITIATOR, startEvent.getInitiator(), xtw);
     writeQualifiedAttribute(ATTRIBUTE_FORM_FORMKEY, startEvent.getFormKey(), xtw);
   }
   
   @Override
   protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    StartEvent startEvent = (StartEvent) element;
+    
+	  StartEvent startEvent = (StartEvent) element;
     writeFormProperties(startEvent, xtw);
   }
   
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    StartEvent startEvent = (StartEvent) element;
-    writeEventDefinitions(startEvent, startEvent.getEventDefinitions(), xtw);
+    super.writeAdditionalChildElements(element, xtw);
+	  //StartEvent startEvent = (StartEvent) element;
+    //writeEventDefinitions(startEvent, startEvent.getEventDefinitions(), xtw);
   }
   
   public void addFormType(String formType) {

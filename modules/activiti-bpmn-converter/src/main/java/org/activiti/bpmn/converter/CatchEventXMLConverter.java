@@ -1,62 +1,50 @@
-/* Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.activiti.bpmn.converter;
 
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.activiti.bpmn.converter.util.BpmnXMLUtil;
+import org.activiti.bpmn.converter.child.DataOutputAssociationParser;
+import org.activiti.bpmn.converter.child.DataOutputParser;
+import org.activiti.bpmn.converter.child.OutputSetParser;
+import org.activiti.bpmn.converter.export.DataAssociationExport;
 import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.IntermediateCatchEvent;
+import org.activiti.bpmn.model.CatchEvent;
+import org.activiti.bpmn.model.DataAssociation;
+import org.activiti.bpmn.model.DataOutput;
 
-/**
- * @author Tijs Rademakers
- */
-public class CatchEventXMLConverter extends BaseBpmnXMLConverter {
-  
-  public static String getXMLType() {
-    return ELEMENT_EVENT_CATCH;
-  }
-  
-  public static Class<? extends BaseElement> getBpmnElementType() {
-    return IntermediateCatchEvent.class;
-  }
-  
-  @Override
-  protected String getXMLElementName() {
-    return ELEMENT_EVENT_CATCH;
-  }
-  
-  @Override
-  protected BaseElement convertXMLToElement(XMLStreamReader xtr) throws Exception {
-    IntermediateCatchEvent catchEvent = new IntermediateCatchEvent();
-    BpmnXMLUtil.addXMLLocation(catchEvent, xtr);
-    parseChildElements(getXMLElementName(), catchEvent, xtr);
-    return catchEvent;
-  }
+public abstract class CatchEventXMLConverter extends EventXMLConverter {
 
-  @Override
-  protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    
-  }
-  
-  @Override
-  protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-  }
+	public CatchEventXMLConverter() {
+		super();
+		DataOutputParser outParser = new DataOutputParser();
+		DataOutputAssociationParser outPutAssociationParser = new DataOutputAssociationParser();
+		OutputSetParser outputSetParser = new OutputSetParser();
+		
+		childElementParsers.put(outParser.getElementName(), outParser);
+		childElementParsers.put(outPutAssociationParser.getElementName(), outPutAssociationParser);
+		childElementParsers.put(outputSetParser.getElementName(), outputSetParser);
+	}
 
-  @Override
-  protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    IntermediateCatchEvent catchEvent = (IntermediateCatchEvent) element;
-    writeEventDefinitions(catchEvent, catchEvent.getEventDefinitions(), xtw);
-  }
+	@Override
+	protected void writeAdditionalChildElements(BaseElement element,
+			XMLStreamWriter xtw) throws Exception {
+		
+		super.writeAdditionalChildElements(element, xtw);
+		if (element instanceof CatchEvent) {
+			CatchEvent event = (CatchEvent)element;
+			for (DataOutput data : event.getDataOutputs()) {
+				writeDataOutput(data, xtw);
+			}
+			for (DataAssociation data : event.getDataOutputAssociations()) {
+				DataAssociationExport.writeDataAssociations(false, data, xtw);	
+			}
+			if (event.getDataOutputSet() != null) {
+				writeDataOutputSet(event.getDataOutputSet(), xtw);
+			}
+			writeEventDefinitions(event, event.getEventDefinitions(), xtw);
+			writeEventDefinitionRefs(event, xtw);
+		}
+	}
+
+	
+
 }

@@ -12,19 +12,62 @@
  */
 package org.activiti.bpmn.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @author Tijs Rademakers
  */
 public class ThrowEvent extends Event {
-  
-  public ThrowEvent clone() {
+	protected List<DataInput> dataInputs = new ArrayList<DataInput>();
+	protected List<DataAssociation> dataInputAssociations = new ArrayList<DataAssociation>();
+	protected DataInputSet dataInputSet = null;
+	
+	
+  public List<DataInput> getDataInputs() {
+		return dataInputs;
+	}
+
+	public void setDataInputs(List<DataInput> dataInputs) {
+		this.dataInputs = dataInputs;
+	}
+
+	public List<DataAssociation> getDataInputAssociations() {
+		return dataInputAssociations;
+	}
+
+	public void setDataInputAssociations(List<DataAssociation> dataInputAssociations) {
+		this.dataInputAssociations = dataInputAssociations;
+	}
+
+	public DataInputSet getDataInputSet() {
+		return dataInputSet;
+	}
+
+	public void setDataInputSet(DataInputSet dataInputSet) {
+		this.dataInputSet = dataInputSet;
+	}
+
+public ThrowEvent clone() {
     ThrowEvent clone = new ThrowEvent();
     clone.setValues(this);
     return clone;
   }
   
-  public void setValues(ThrowEvent otherEvent) {
-    super.setValues(otherEvent);
+  public void setValues(ThrowEvent other) {
+    super.setValues(other);
+    dataInputs = new ArrayList<DataInput>();
+	for (DataInput data : other.getDataInputs()) {
+		dataInputs.add(data.clone());
+	}
+	dataInputAssociations = new ArrayList<DataAssociation>();
+	for (DataAssociation data : other.getDataInputAssociations()) {
+		dataInputAssociations.add(data.clone());
+	}
+	if (other.getDataInputSet() != null) {
+		setDataInputSet(other.getDataInputSet().clone());
+	}
+    
   }
 }

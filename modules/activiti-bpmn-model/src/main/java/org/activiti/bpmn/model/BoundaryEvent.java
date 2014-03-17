@@ -17,7 +17,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 /**
  * @author Tijs Rademakers
  */
-public class BoundaryEvent extends Event {
+public class BoundaryEvent extends CatchEvent {
 
   @JsonIgnore
   protected Activity attachedToRef;

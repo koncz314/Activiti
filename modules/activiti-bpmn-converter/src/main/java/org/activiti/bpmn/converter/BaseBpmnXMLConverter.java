@@ -17,13 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.child.BaseChildElementParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
-import org.activiti.bpmn.converter.export.LoopCharacteristicsExport;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.Artifact;
@@ -33,6 +33,7 @@ import org.activiti.bpmn.model.DataInput;
 import org.activiti.bpmn.model.DataInputSet;
 import org.activiti.bpmn.model.DataOutput;
 import org.activiti.bpmn.model.DataOutputSet;
+import org.activiti.bpmn.model.DataState;
 import org.activiti.bpmn.model.ErrorEventDefinition;
 import org.activiti.bpmn.model.Event;
 import org.activiti.bpmn.model.EventDefinition;
@@ -45,6 +46,7 @@ import org.activiti.bpmn.model.Gateway;
 import org.activiti.bpmn.model.IOSpecification;
 import org.activiti.bpmn.model.MessageEventDefinition;
 import org.activiti.bpmn.model.Process;
+import org.activiti.bpmn.model.Property;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.SignalEventDefinition;
 import org.activiti.bpmn.model.StartEvent;
@@ -144,60 +146,24 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   public void convertToXML(XMLStreamWriter xtw, BaseElement baseElement, BpmnModel model) throws Exception {
     
     this.model = model;
-    
     xtw.writeStartElement(getXMLElementName());
     didWriteExtensionStartElement = false;
     writeDefaultAttribute(ATTRIBUTE_ID, baseElement.getId(), xtw);
-    if (baseElement instanceof FlowElement) {
-      writeDefaultAttribute(ATTRIBUTE_NAME, ((FlowElement) baseElement).getName(), xtw);
-    }
-    
-    if (baseElement instanceof Activity) {
-      final Activity activity = (Activity) baseElement;
-      if (activity.isAsynchronous()) {
-        writeQualifiedAttribute(ATTRIBUTE_ACTIVITY_ASYNCHRONOUS, ATTRIBUTE_VALUE_TRUE, xtw);
-      }
-      if (activity.isNotExclusive()) {
-        writeQualifiedAttribute(ATTRIBUTE_ACTIVITY_EXCLUSIVE, ATTRIBUTE_VALUE_FALSE, xtw);
-      }
-      if (StringUtils.isNotEmpty(activity.getDefaultFlow())) {
-        FlowElement defaultFlowElement = model.getFlowElement(activity.getDefaultFlow());
-        if (defaultFlowElement != null && defaultFlowElement instanceof SequenceFlow) {
-          writeDefaultAttribute(ATTRIBUTE_DEFAULT, activity.getDefaultFlow(), xtw);
-        }
-      }
-    }
-    
-    if (baseElement instanceof Gateway) {
-      final Gateway gateway = (Gateway) baseElement;
-      if (StringUtils.isNotEmpty(gateway.getDefaultFlow())) {
-        FlowElement defaultFlowElement = model.getFlowElement(gateway.getDefaultFlow());
-        if (defaultFlowElement != null && defaultFlowElement instanceof SequenceFlow) {
-          writeDefaultAttribute(ATTRIBUTE_DEFAULT, gateway.getDefaultFlow(), xtw);
-        }
-      }
-    }
-    
     writeAdditionalAttributes(baseElement, xtw);
     
-    if (baseElement instanceof FlowElement) {
-      final FlowElement flowElement = (FlowElement) baseElement;
-      if (StringUtils.isNotEmpty(flowElement.getDocumentation())) {
-  
-        xtw.writeStartElement(ELEMENT_DOCUMENTATION);
-        xtw.writeCharacters(flowElement.getDocumentation());
-        xtw.writeEndElement();
+    if (baseElement instanceof Gateway) {
+        final Gateway gateway = (Gateway) baseElement;
+        
+        if (StringUtils.isNotEmpty(gateway.getDefaultFlow())) {
+          FlowElement defaultFlowElement = model.getFlowElement(gateway.getDefaultFlow());
+          if (defaultFlowElement != null && defaultFlowElement instanceof SequenceFlow) {
+            writeDefaultAttribute(ATTRIBUTE_DEFAULT, gateway.getDefaultFlow(), xtw);
+          }
+        }
       }
-      
-      if (flowElement.getCategoryValueRefs() != null && flowElement.getCategoryValueRefs().size() != 0) {
-    	  for (String categoryValueRef : flowElement.getCategoryValueRefs()) {
-    		  xtw.writeStartElement(ATTRIBUTE_CATEGORY_VALUE_REF);
-    		  xtw.writeCharacters(categoryValueRef);
-    		  xtw.writeEndElement();
-    	  }
-      }
-      
-    }
+    
+    writeElementWithText(ELEMENT_DOCUMENTATION, baseElement.getDocumentation(), xtw);
+    
     
     writeExtensionChildElements(baseElement, xtw);
     didWriteExtensionStartElement = writeListeners(baseElement, xtw);
@@ -383,6 +349,12 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
     }
   }
   
+  protected void writeEventDefinitionRefs(Event parentEvent, XMLStreamWriter xtw) throws Exception {
+	  for (String ref : parentEvent.getEventDefinitionsRefs()) {
+		  writeElementWithText("eventDefinitionRef", ref, xtw);
+	  }
+  }
+  
   protected void writeTimerDefinition(Event parentEvent, TimerEventDefinition timerDefinition, XMLStreamWriter xtw) throws Exception {
     xtw.writeStartElement(ELEMENT_EVENT_TIMERDEFINITION);
     if (StringUtils.isNotEmpty(timerDefinition.getId())) {
@@ -556,5 +528,26 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
   
   protected void writeElementWithText(String elementName, String value, XMLStreamWriter xtw) throws Exception {
 	  BpmnXMLUtil.writeElementWithText(elementName, value, xtw);
+  }
+  
+  protected void writeProperty(Property prop, XMLStreamWriter xtw) throws Exception {
+	  if (prop != null) {
+		  boolean emptyDataState = prop.getDataState() == null;
+		  if (emptyDataState) {
+			  xtw.writeEmptyElement("property");
+		  } else {
+			  xtw.writeStartElement("property");
+		  }
+		  writeDefaultAttribute(ATTRIBUTE_NAME, prop.getName(), xtw);
+		  writeDefaultAttribute(ATTRIBUTE_DATA_SUBJECT_REF, prop.getItemSubjectRef(), xtw);
+		  if (!emptyDataState) {
+			  writeDataState(prop.getDataState(), xtw);
+			  xtw.writeEndElement();
+		  }
+	  }
+  }
+  
+  protected void writeDataState(DataState state, XMLStreamWriter xtw) {
+	  
   }
 }

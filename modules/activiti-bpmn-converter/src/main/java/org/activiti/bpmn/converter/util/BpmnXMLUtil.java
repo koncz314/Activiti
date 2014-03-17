@@ -189,6 +189,14 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
 	    }
   }
   
+  public static void writeElementWithCData(String elementName, String value, XMLStreamWriter xtw) throws Exception {
+	  if (StringUtils.isNotEmpty(value) && "null".equalsIgnoreCase(value) == false) {
+	      xtw.writeStartElement(elementName);
+	      xtw.writeCData(value);
+	      xtw.writeEndElement();
+	    }
+  }
+  
   public static boolean writeExtensionElements(BaseElement baseElement, boolean didWriteExtensionStartElement, XMLStreamWriter xtw) throws Exception {
     if (baseElement.getExtensionElements().size() > 0) {
       if (didWriteExtensionStartElement == false) {

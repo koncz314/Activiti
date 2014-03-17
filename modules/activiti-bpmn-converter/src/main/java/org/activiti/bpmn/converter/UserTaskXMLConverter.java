@@ -108,7 +108,8 @@ public class UserTaskXMLConverter extends ActivityXMLConverter {
   @Override
   @SuppressWarnings("unchecked")
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    UserTask userTask = (UserTask) element;
+	  super.writeAdditionalAttributes(element, xtw);
+	  UserTask userTask = (UserTask) element;
     writeQualifiedAttribute(ATTRIBUTE_TASK_USER_ASSIGNEE, userTask.getAssignee(), xtw);
     writeQualifiedAttribute(ATTRIBUTE_TASK_USER_OWNER, userTask.getOwner(), xtw);
     writeQualifiedAttribute(ATTRIBUTE_TASK_USER_CANDIDATEUSERS, convertToDelimitedString(userTask.getCandidateUsers()), xtw);

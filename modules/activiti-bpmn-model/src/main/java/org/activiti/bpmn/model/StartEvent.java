@@ -18,11 +18,12 @@ import java.util.List;
 /**
  * @author Tijs Rademakers
  */
-public class StartEvent extends Event {
+public class StartEvent extends CatchEvent {
 
   protected String initiator;
   protected String formKey;
   protected List<FormProperty> formProperties = new ArrayList<FormProperty>();
+  protected boolean isInterrupting = true;
 
   public String getInitiator() {
     return initiator;
@@ -43,7 +44,13 @@ public class StartEvent extends Event {
     this.formProperties = formProperties;
   }
   
-  public StartEvent clone() {
+  public boolean isInterrupting() {
+	return isInterrupting;
+}
+public void setInterrupting(boolean isInterrupting) {
+	this.isInterrupting = isInterrupting;
+}
+public StartEvent clone() {
     StartEvent clone = new StartEvent();
     clone.setValues(this);
     return clone;
@@ -53,7 +60,7 @@ public class StartEvent extends Event {
     super.setValues(otherEvent);
     setInitiator(otherEvent.getInitiator());
     setFormKey(otherEvent.getFormKey());
-    
+    setInterrupting(otherEvent.isInterrupting());
     formProperties = new ArrayList<FormProperty>();
     if (otherEvent.getFormProperties() != null && otherEvent.getFormProperties().size() > 0) {
       for (FormProperty property : otherEvent.getFormProperties()) {

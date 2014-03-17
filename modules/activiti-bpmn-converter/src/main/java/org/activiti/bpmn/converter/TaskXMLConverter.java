@@ -47,6 +47,7 @@ public class TaskXMLConverter extends ActivityXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalAttributes(element, xtw);
   }
   
   @Override

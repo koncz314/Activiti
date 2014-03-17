@@ -15,7 +15,7 @@ package org.activiti.bpmn.model;
 /**
  * @author Tijs Rademakers
  */
-public class IntermediateCatchEvent extends Event {
+public class IntermediateCatchEvent extends CatchEvent {
 
   public IntermediateCatchEvent clone() {
     IntermediateCatchEvent clone = new IntermediateCatchEvent();

@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class FlowElement extends BaseElement implements HasExecutionListeners {
 
   protected String name;
-  protected String documentation;
+  //protected String documentation;
   protected List<String> categoryValueRefs = new ArrayList<String>();
   protected List<ActivitiListener> executionListeners = new ArrayList<ActivitiListener>();
 
@@ -34,13 +34,13 @@ public abstract class FlowElement extends BaseElement implements HasExecutionLis
     this.name = name;
   }
 
-  public String getDocumentation() {
+  /*public String getDocumentation() {
     return documentation;
   }
 
   public void setDocumentation(String documentation) {
     this.documentation = documentation;
-  }
+  }*/
   
   public List<String> getCategoryValueRefs() {
 	return categoryValueRefs;
@@ -63,7 +63,7 @@ public abstract class FlowElement extends BaseElement implements HasExecutionLis
   public void setValues(FlowElement otherElement) {
     super.setValues(otherElement);
     setName(otherElement.getName());
-    setDocumentation(otherElement.getDocumentation());
+    //setDocumentation(otherElement.getDocumentation());
     
     executionListeners = new ArrayList<ActivitiListener>();
     if (otherElement.getExecutionListeners() != null && otherElement.getExecutionListeners().size() > 0) {

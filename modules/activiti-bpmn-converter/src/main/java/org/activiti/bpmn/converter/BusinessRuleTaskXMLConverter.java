@@ -56,7 +56,8 @@ public class BusinessRuleTaskXMLConverter extends ActivityXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    BusinessRuleTask businessRuleTask = (BusinessRuleTask) element;
+    super.writeAdditionalAttributes(element, xtw);
+	  BusinessRuleTask businessRuleTask = (BusinessRuleTask) element;
     String inputVariables = convertToDelimitedString(businessRuleTask.getInputVariables());
     if (StringUtils.isNotEmpty(inputVariables)) {
       writeQualifiedAttribute(ATTRIBUTE_TASK_RULE_VARIABLES_INPUT, inputVariables, xtw);

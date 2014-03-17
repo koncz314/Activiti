@@ -24,10 +24,12 @@ public abstract class Activity extends FlowNode {
   protected boolean notExclusive;
   protected String defaultFlow;
   protected boolean forCompensation;
-  protected LoopCharacteristics loopCharacteristics;
+  
   protected IOSpecification ioSpecification;
+  protected List<Property> propertys = new ArrayList<Property>();
   protected List<DataAssociation> dataInputAssociations = new ArrayList<DataAssociation>();
   protected List<DataAssociation> dataOutputAssociations = new ArrayList<DataAssociation>();
+  protected LoopCharacteristics loopCharacteristics;
   protected List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
 
   public boolean isAsynchronous() {
@@ -72,7 +74,13 @@ public abstract class Activity extends FlowNode {
   public void setIoSpecification(IOSpecification ioSpecification) {
     this.ioSpecification = ioSpecification;
   }
-  public List<DataAssociation> getDataInputAssociations() {
+  public List<Property> getPropertys() {
+	return propertys;
+}
+public void setPropertys(List<Property> propertys) {
+	this.propertys = propertys;
+}
+public List<DataAssociation> getDataInputAssociations() {
     return dataInputAssociations;
   }
   public void setDataInputAssociations(List<DataAssociation> dataInputAssociations) {
@@ -118,5 +126,13 @@ public abstract class Activity extends FlowNode {
         boundaryEvents.add(event.clone());
       }
     }
+    propertys = new ArrayList<Property>();
+	if (otherActivity.getPropertys() != null
+			&& otherActivity.getPropertys().size() > 0) {
+		for (Property prop : otherActivity.getPropertys()) {
+			propertys.add(prop.clone());
+		}
+	}
+    
   }
 }

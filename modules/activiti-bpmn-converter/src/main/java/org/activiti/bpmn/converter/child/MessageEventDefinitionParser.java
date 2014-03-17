@@ -40,7 +40,7 @@ public class MessageEventDefinitionParser extends BaseChildElementParser {
     
     if(StringUtils.isEmpty(eventDefinition.getMessageRef())) {
       model.addProblem("attribute 'messageRef' is required", xtr);
-    } else {
+    } /*else {
       
       int indexOfP = eventDefinition.getMessageRef().indexOf(':');
       if (indexOfP != -1) {
@@ -54,7 +54,7 @@ public class MessageEventDefinitionParser extends BaseChildElementParser {
       if(model.containsMessageId(eventDefinition.getMessageRef()) == false) {
         model.addProblem("Invalid 'messageRef': no message with id '" + eventDefinition.getMessageRef() + "' found.", xtr);
       }
-    }
+    }*/
     
     BpmnXMLUtil.parseChildElements(ELEMENT_EVENT_MESSAGEDEFINITION, eventDefinition, xtr, model);
     

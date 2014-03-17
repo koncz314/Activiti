@@ -66,7 +66,7 @@ public class SendTaskXMLConverter extends ActivityXMLConverter {
   
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    
+	  super.writeAdditionalAttributes(element, xtw);
     SendTask sendTask = (SendTask) element;
     if (StringUtils.isNotEmpty(sendTask.getMessageRef()))
 		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, sendTask.getMessageRef());

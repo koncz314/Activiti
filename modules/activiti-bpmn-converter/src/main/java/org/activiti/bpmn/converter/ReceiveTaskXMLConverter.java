@@ -56,6 +56,7 @@ public class ReceiveTaskXMLConverter extends ActivityXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
+	  super.writeAdditionalAttributes(element, xtw);
 	  ReceiveTask receiveTask = (ReceiveTask)element;
 	  if (StringUtils.isNotEmpty(receiveTask.getMessageRef()))
 		  xtw.writeAttribute(ATTRIBUTE_MESSAGE_REF, receiveTask.getMessageRef());

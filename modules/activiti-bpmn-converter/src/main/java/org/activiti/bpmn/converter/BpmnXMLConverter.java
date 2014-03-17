@@ -140,8 +140,8 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
     addConverter(SequenceFlowXMLConverter.getXMLType(), SequenceFlowXMLConverter.getBpmnElementType(), SequenceFlowXMLConverter.class);
     
     // catch, throw and boundary event
-    addConverter(CatchEventXMLConverter.getXMLType(), CatchEventXMLConverter.getBpmnElementType(), CatchEventXMLConverter.class);
-    addConverter(ThrowEventXMLConverter.getXMLType(), ThrowEventXMLConverter.getBpmnElementType(), ThrowEventXMLConverter.class);
+    addConverter(InterMediateCatchEventXMLConverter.getXMLType(), InterMediateCatchEventXMLConverter.getBpmnElementType(), InterMediateCatchEventXMLConverter.class);
+    addConverter(IntermediateThrowEventXMLConverter.getXMLType(), IntermediateThrowEventXMLConverter.getBpmnElementType(), IntermediateThrowEventXMLConverter.class);
     addConverter(BoundaryEventXMLConverter.getXMLType(), BoundaryEventXMLConverter.getBpmnElementType(), BoundaryEventXMLConverter.class);
     
     // artifacts

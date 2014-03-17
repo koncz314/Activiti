@@ -63,7 +63,8 @@ public class ScriptTaskXMLConverter extends ActivityXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    ScriptTask scriptTask = (ScriptTask) element;
+	  super.writeAdditionalAttributes(element, xtw);
+	  ScriptTask scriptTask = (ScriptTask) element;
     writeDefaultAttribute(ATTRIBUTE_TASK_SCRIPT_FORMAT, scriptTask.getScriptFormat(), xtw);
     writeQualifiedAttribute(ATTRIBUTE_TASK_SCRIPT_RESULTVARIABLE, scriptTask.getResultVariable(), xtw);
     writeQualifiedAttribute(ATTRIBUTE_TASK_SCRIPT_AUTO_STORE_VARIABLE, String.valueOf(scriptTask.isAutoStoreVariables()), xtw);

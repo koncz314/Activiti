@@ -61,7 +61,8 @@ public class CallActivityXMLConverter extends ActivityXMLConverter {
 
   @Override
   protected void writeAdditionalAttributes(BaseElement element, XMLStreamWriter xtw) throws Exception {
-    CallActivity callActivity = (CallActivity) element;
+	  super.writeAdditionalAttributes(element, xtw);
+	  CallActivity callActivity = (CallActivity) element;
     if (StringUtils.isNotEmpty(callActivity.getCalledElement())) {
       xtw.writeAttribute(ATTRIBUTE_CALL_ACTIVITY_CALLEDELEMENT, callActivity.getCalledElement());
     }
