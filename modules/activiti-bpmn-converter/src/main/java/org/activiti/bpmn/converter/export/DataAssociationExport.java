@@ -13,6 +13,7 @@ public class DataAssociationExport implements BpmnXMLConstants {
 		String elementName = isInput ? ELEMENT_INPUT_ASSOCIATION : ELEMENT_OUTPUT_ASSOCIATION;
 		if (dataAssociation != null) {
 			xtw.writeStartElement(elementName);
+			writeDefaultAttribute(ATTRIBUTE_ID, dataAssociation.getId(), xtw);
 			writeElementWithText(ELEMENT_SOURCE_REF, dataAssociation.getSourceRef(), xtw);
 			writeElementWithText(ELEMENT_TARGET_REF, dataAssociation.getTargetRef(), xtw);
 			writeElementWithCData(ELEMENT_TRANSFORMATION, dataAssociation.getTransformation(), xtw);

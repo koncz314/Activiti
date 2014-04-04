@@ -12,6 +12,8 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.DataObjectContainer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -112,7 +114,7 @@ public class SubProcess extends Activity implements FlowElementsContainer, DataO
   
   public void setValues(SubProcess otherElement) {
     super.setValues(otherElement);
-    
+    /*
     flowElementList = new ArrayList<FlowElement>();
     if (otherElement.getFlowElements() != null && otherElement.getFlowElements().size() > 0) {
       for (FlowElement element : otherElement.getFlowElements()) {
@@ -126,6 +128,7 @@ public class SubProcess extends Activity implements FlowElementsContainer, DataO
         artifactList.add(artifact.clone());
       }
     }
+    */
     dataObjectMap = new LinkedHashMap<String, DataObject>();
     for (DataObject data : otherElement.getAllDataObjects()) {
     	dataObjectMap.put(data.getId(), data.clone());

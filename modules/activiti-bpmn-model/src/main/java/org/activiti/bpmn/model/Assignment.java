@@ -26,7 +26,8 @@ public class Assignment extends BaseElement {
   }
   
   public void setValues(Assignment otherAssignment) {
-    setFrom(otherAssignment.getFrom());
+    super.setValues(otherAssignment);
+	setFrom(otherAssignment.getFrom());
     setTo(otherAssignment.getTo());
   }
 }

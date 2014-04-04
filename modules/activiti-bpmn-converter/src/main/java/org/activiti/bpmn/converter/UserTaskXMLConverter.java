@@ -19,11 +19,10 @@ import java.util.List;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.activiti.bpmn.converter.child.BaseChildElementParser;
+import org.activiti.bpmn.converter.child.HumanPerformerParser;
+import org.activiti.bpmn.converter.child.PotentialOwnerParser;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
-import org.activiti.bpmn.converter.util.CommaSplitter;
 import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ExtensionAttribute;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.bpmn.model.alfresco.AlfrescoUserTask;
@@ -142,6 +141,7 @@ public class UserTaskXMLConverter extends ActivityXMLConverter {
     }
   }
   
+  /*
   public class HumanPerformerParser extends BaseChildElementParser {
 
     public String getElementName() {
@@ -203,5 +203,5 @@ public class UserTaskXMLConverter extends ActivityXMLConverter {
         }
       }
     }
-  }
+  }*/
 }

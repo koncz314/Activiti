@@ -43,8 +43,7 @@ public class IOSpecificationParser extends BaseChildElementParser {
         parentElement instanceof SubProcess == false && parentElement instanceof Process == false) return;
     */
 	  
-	  if (parentElement instanceof Activity == false && 
-		        parentElement instanceof SubProcess == false && parentElement instanceof Process == false) return;
+	  if (parentElement instanceof Activity == false && parentElement instanceof Process == false) return;
     IOSpecification ioSpecification = new IOSpecification();
     BpmnXMLUtil.addXMLLocation(ioSpecification, xtr);
     boolean readyWithIOSpecification = false;

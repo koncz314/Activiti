@@ -52,6 +52,11 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_MESSAGE_FLOW = "messageFlow";
   public static final String ELEMENT_ERROR = "error";
   public static final String ELEMENT_ERROR_REF = "errorRef";
+  public static final String ELEMENT_RESOURCE = "resource";
+  public static final String ELEMENT_RESOURCE_PARAMETER = "resourceParameter";
+  
+  public static final String ATTRIBUTE_IS_REQUIRED = "isRequired";
+  
   public static final String ELEMENT_COLLABORATION = "collaboration";
   public static final String ELEMENT_PARTICIPANT = "participant";
   public static final String ELEMENT_LANESET = "laneSet";
@@ -130,6 +135,20 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_ASSIGNMENT = "assignment";
   public static final String ELEMENT_FROM = "from";
   public static final String ELEMENT_TO = "to";
+  
+  public static final String ELEMENT_PERFORMER = "performer";
+  public static final String ELEMENT_HUMAN_PERFORMER = "humanPerformer";
+  public static final String ELEMENT_POTENTIAL_OWNER = "potentialOwner";
+  
+  
+  public static final String ELEMENT_FORMAL_EXPRESSION = "formalExpression";
+  public static final String ELEMENT_EXPRESSION = "expression";
+  public static final String ELEMENT_RESOURCE_ASSIGNMENT_EXPRESSION = "resourceAssignmentExpression";
+  public static final String ELEMENT_RESOURCE_PARAMETER_BINDING = "resourceParameterBinding";
+  public static final String ELEMENT_RESOURCE_REF = "resourceRef";
+  public static final String ATTRIBUTE_EVALUATES_TO_TYPE_REF = "evaluatesToTypeRef";
+  public static final String ATTRIBUTE_LANGUAGE = "language";
+  public static final String ATTRIUBTE_PARAMETER_REF = "parameterRef";
   
   // fake element for mail task
   public static final String ELEMENT_TASK_MAIL = "mailTask";
@@ -273,6 +292,7 @@ public interface BpmnXMLConstants {
   public static final String ELEMENT_DI_WAYPOINT = "waypoint";
   public static final String ATTRIBUTE_DI_BPMNELEMENT = "bpmnElement";
   public static final String ATTRIBUTE_DI_IS_EXPANDED = "isExpanded";
+  public static final String ATTRIBUTE_DI_IS_HORIZONTAL = "isHorizontal";
   public static final String ATTRIBUTE_DI_WIDTH = "width";
   public static final String ATTRIBUTE_DI_HEIGHT = "height";
   public static final String ATTRIBUTE_DI_X = "x";

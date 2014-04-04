@@ -4,12 +4,18 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.converter.child.DataInputAssociationParser;
 import org.activiti.bpmn.converter.child.DataOutputAssociationParser;
+import org.activiti.bpmn.converter.child.HumanPerformerParser;
+import org.activiti.bpmn.converter.child.PerformerParser;
+import org.activiti.bpmn.converter.child.PotentialOwnerParser;
 import org.activiti.bpmn.converter.export.DataAssociationExport;
 import org.activiti.bpmn.converter.export.LoopCharacteristicsExport;
+import org.activiti.bpmn.converter.export.ResourceRoleExport;
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.DataAssociation;
 import org.activiti.bpmn.model.FlowElement;
+import org.activiti.bpmn.model.HumanPerformer;
+import org.activiti.bpmn.model.ResourceRole;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,8 +24,11 @@ public abstract class ActivityXMLConverter extends FlowNodeXMLConverter {
 	public ActivityXMLConverter() {
 		DataInputAssociationParser inParser = new DataInputAssociationParser();
 		DataOutputAssociationParser outParser = new DataOutputAssociationParser();
+		PerformerParser performerParser = new PerformerParser();
+		
 		childElementParsers.put(inParser.getElementName(), inParser);
 		childElementParsers.put(outParser.getElementName(), outParser);
+		childElementParsers.put(performerParser.getElementName(), performerParser);
 	}
 
 	@Override
@@ -44,6 +53,9 @@ public abstract class ActivityXMLConverter extends FlowNodeXMLConverter {
 				}
 			}
 			
+			for (ResourceRole role : activity.getAllResourceRoles()) {
+				ResourceRoleExport.writeResourceRole(role, xtw);
+			}
 			LoopCharacteristicsExport.writeLoopCharacteristics(activity, xtw);
 
 		}

@@ -1,6 +1,8 @@
 package org.activiti.bpmn.model;
 
-public class DataInput extends BaseElement {
+import hu.clickandlike.bpmn.model.interfaces.IData;
+
+public class DataInput extends BaseElement implements IData {
 
 	protected String itemSubjectRef;
 	protected boolean isCollection = false;

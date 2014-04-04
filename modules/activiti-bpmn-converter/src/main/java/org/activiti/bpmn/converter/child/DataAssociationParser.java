@@ -42,6 +42,10 @@ public class DataAssociationParser implements BpmnXMLConstants {
         } else if (xtr.isStartElement() && ELEMENT_ASSIGNMENT.equals(xtr.getLocalName())) {
           assignment = new Assignment();
           BpmnXMLUtil.addXMLLocation(assignment, xtr);
+          if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_ID))) {
+			assignment.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+          }
+          
           
         } else if (xtr.isStartElement() && ELEMENT_FROM.equals(xtr.getLocalName())) {
           String from = xtr.getElementText();

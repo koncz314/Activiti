@@ -34,6 +34,15 @@ public class BpmnShapeParser implements BpmnXMLConstants {
   	String strIsExpanded = xtr.getAttributeValue(null, ATTRIBUTE_DI_IS_EXPANDED);
     if ("true".equalsIgnoreCase(strIsExpanded)) {
       graphicInfo.setExpanded(true);
+    } else if ("false".equalsIgnoreCase(strIsExpanded)){
+    	graphicInfo.setExpanded(false);
+    }
+    
+    String strIsHorizontal = xtr.getAttributeValue(null, ATTRIBUTE_DI_IS_HORIZONTAL);
+    if ("true".equalsIgnoreCase(strIsHorizontal)) {
+      graphicInfo.setHorizontal(true);
+    } else if ("false".equalsIgnoreCase(strIsHorizontal)){
+    	graphicInfo.setHorizontal(false);
     }
   	
     BpmnXMLUtil.addXMLLocation(graphicInfo, xtr);
@@ -44,6 +53,8 @@ public class BpmnShapeParser implements BpmnXMLConstants {
 				graphicInfo.setY(Double.valueOf(xtr.getAttributeValue(null, ATTRIBUTE_DI_Y)));
 				graphicInfo.setWidth(Double.valueOf(xtr.getAttributeValue(null, ATTRIBUTE_DI_WIDTH)));
 				graphicInfo.setHeight(Double.valueOf(xtr.getAttributeValue(null, ATTRIBUTE_DI_HEIGHT)));
+				
+				
 				
 				model.addGraphicInfo(id, graphicInfo);
 				break;

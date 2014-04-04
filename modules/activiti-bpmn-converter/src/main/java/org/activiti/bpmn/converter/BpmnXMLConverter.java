@@ -38,14 +38,18 @@ import javax.xml.validation.Validator;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.alfresco.AlfrescoStartEventXMLConverter;
 import org.activiti.bpmn.converter.alfresco.AlfrescoUserTaskXMLConverter;
+import org.activiti.bpmn.converter.child.DataInputAssociationParser;
 import org.activiti.bpmn.converter.child.DataObjectParser;
+import org.activiti.bpmn.converter.child.DataOutputAssociationParser;
 import org.activiti.bpmn.converter.child.DocumentationParser;
 import org.activiti.bpmn.converter.child.IOSpecificationParser;
 import org.activiti.bpmn.converter.child.MultiInstanceParser;
+import org.activiti.bpmn.converter.child.PerformerParser;
 import org.activiti.bpmn.converter.child.StandardLoopParser;
 import org.activiti.bpmn.converter.export.ActivitiListenerExport;
 import org.activiti.bpmn.converter.export.BPMNDIExport;
 import org.activiti.bpmn.converter.export.CategoryExport;
+import org.activiti.bpmn.converter.export.DataAssociationExport;
 import org.activiti.bpmn.converter.export.DataObjectExport;
 import org.activiti.bpmn.converter.export.DefinitionsRootExport;
 import org.activiti.bpmn.converter.export.ErrorExport;
@@ -55,6 +59,8 @@ import org.activiti.bpmn.converter.export.ItemDefinitionExport;
 import org.activiti.bpmn.converter.export.LoopCharacteristicsExport;
 import org.activiti.bpmn.converter.export.PoolExport;
 import org.activiti.bpmn.converter.export.ProcessExport;
+import org.activiti.bpmn.converter.export.ResourceExport;
+import org.activiti.bpmn.converter.export.ResourceRoleExport;
 import org.activiti.bpmn.converter.export.SignalAndMessageDefinitionExport;
 import org.activiti.bpmn.converter.parser.BpmnEdgeParser;
 import org.activiti.bpmn.converter.parser.BpmnShapeParser;
@@ -69,6 +75,7 @@ import org.activiti.bpmn.converter.parser.MessageFlowParser;
 import org.activiti.bpmn.converter.parser.MessageParser;
 import org.activiti.bpmn.converter.parser.PotentialStarterParser;
 import org.activiti.bpmn.converter.parser.ProcessParser;
+import org.activiti.bpmn.converter.parser.ResourceParser;
 import org.activiti.bpmn.converter.parser.SignalParser;
 import org.activiti.bpmn.converter.parser.SubProcessParser;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
@@ -80,12 +87,14 @@ import org.activiti.bpmn.model.Association;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.DataAssociation;
 import org.activiti.bpmn.model.DataObject;
 import org.activiti.bpmn.model.EventSubProcess;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.Pool;
 import org.activiti.bpmn.model.Process;
+import org.activiti.bpmn.model.ResourceRole;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.SubProcess;
 import org.activiti.bpmn.model.TextAnnotation;
@@ -307,6 +316,10 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
           new ErrorParser().parse(xtr, model);
           
           
+				} else if (ELEMENT_RESOURCE.equals(xtr.getLocalName())) {
+			          new ResourceParser().parse(xtr, model);
+			   
+				
 				} else if (ELEMENT_IMPORT.equals(xtr.getLocalName())) {
 				  new ImportParser().parse(xtr, model);
           
@@ -320,8 +333,20 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 					new CategoryParser().parse(xtr, model);
 					
 				} else if (ELEMENT_IOSPECIFICATION.equals(xtr.getLocalName())) {
-          new IOSpecificationParser().parseChildElement(xtr, activeProcess, model);
+					BaseElement parentElement = activeSubProcessList.size() > 0 ? activeSubProcessList.get(activeSubProcessList.size()-1) :
+						activeProcess;
+						new IOSpecificationParser().parseChildElement(xtr, parentElement, model);
 					
+				} else if (ELEMENT_INPUT_ASSOCIATION.equals(xtr.getLocalName())) { 
+					if (activeSubProcessList.size() > 0) {
+						new DataInputAssociationParser().parseChildElement(xtr, activeSubProcessList.get(activeSubProcessList.size() -1), model);
+					}
+				
+				} else if (ELEMENT_OUTPUT_ASSOCIATION.equals(xtr.getLocalName())) { 
+					if (activeSubProcessList.size() > 0) {
+						new DataOutputAssociationParser().parseChildElement(xtr, activeSubProcessList.get(activeSubProcessList.size() -1), model);
+					}
+				
 				} else if (ELEMENT_PARTICIPANT.equals(xtr.getLocalName())) {
 				  
 				  if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_ID))) {
@@ -345,7 +370,12 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 						activeProcess;
 					new DataObjectParser().parseChildElement(xtr, parentElement, model);
 					  
-				  }
+				} else if (ELEMENT_PERFORMER.equals(xtr.getLocalName())) {
+						BaseElement parentElement = activeSubProcessList.size() > 0 ? activeSubProcessList.get(activeSubProcessList.size()-1) :
+							activeProcess;
+						new PerformerParser().parseChildElement(xtr, parentElement, model);
+						  
+				}
 				else if (ELEMENT_POTENTIAL_STARTER.equals(xtr.getLocalName())) {
 				  new PotentialStarterParser().parse(xtr, activeProcess);
 				  
@@ -494,6 +524,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       DefinitionsRootExport.writeRootElement(model, xtw, encoding);
       ImportExport.writeImports(model, xtw);
       ItemDefinitionExport.writeItemDefinitions(model, xtw);
+      ResourceExport.writeResources(model, xtw);
       SignalAndMessageDefinitionExport.writeSignalsAndMessages(model, xtw);
       ErrorExport.writeErrors(model, xtw);
       InterfaceExport.writeInterfaces(model, xtw);
@@ -502,7 +533,9 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       PoolExport.writePools(model, xtw);
       
       for (Process process : model.getProcesses()) {
-        
+    	for (DataObject data : process.getAllDataObjects()) {
+            	DataObjectExport.writeDataObject(data, xtw);
+        }
         if(process.getFlowElements().size() == 0 && process.getLanes().size() == 0) {
           // empty process, ignore it 
           continue;
@@ -510,9 +543,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       
         ProcessExport.writeProcess(process, xtw);
         
-        for (DataObject data : process.getAllDataObjects()) {
-          	DataObjectExport.writeDataObject(data, xtw);
-          }
+        
         
         for (FlowElement flowElement : process.getFlowElements()) {
           createXML(flowElement, model, xtw);
@@ -521,6 +552,10 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         for (Artifact artifact : process.getArtifacts()) {
           createXML(artifact, model, xtw);
         }
+        
+        for (ResourceRole role : process.getAllResourceRoles()) {
+			ResourceRoleExport.writeResourceRole(role, xtw);
+		}
         
         // end process element
         xtw.writeEndElement();
@@ -575,6 +610,20 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
         // closing extensions element
         xtw.writeEndElement();
       }
+      
+      BpmnXMLUtil.writeIOSpecification(subProcess.getIoSpecification(), xtw);
+      
+      for (DataAssociation ass : subProcess.getDataInputAssociations()) {
+    	  DataAssociationExport.writeDataAssociations(true, ass, xtw);
+      }
+      for (DataAssociation ass : subProcess.getDataOutputAssociations()) {
+    	  DataAssociationExport.writeDataAssociations(false, ass, xtw);
+      }
+      
+      for (ResourceRole role : subProcess.getAllResourceRoles()) {
+			ResourceRoleExport.writeResourceRole(role, xtw);
+		}
+      
       LoopCharacteristicsExport.writeLoopCharacteristics(subProcess, xtw);
       
       for (DataObject data : subProcess.getAllDataObjects()) {

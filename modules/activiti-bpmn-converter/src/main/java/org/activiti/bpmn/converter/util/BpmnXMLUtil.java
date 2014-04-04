@@ -41,9 +41,14 @@ import org.activiti.bpmn.converter.child.TimeDurationParser;
 import org.activiti.bpmn.converter.child.TimerEventDefinitionParser;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.DataInput;
+import org.activiti.bpmn.model.DataInputSet;
+import org.activiti.bpmn.model.DataOutput;
+import org.activiti.bpmn.model.DataOutputSet;
 import org.activiti.bpmn.model.ExtensionAttribute;
 import org.activiti.bpmn.model.ExtensionElement;
 import org.activiti.bpmn.model.GraphicInfo;
+import org.activiti.bpmn.model.IOSpecification;
 import org.apache.commons.lang3.StringUtils;
 
 public class BpmnXMLUtil implements BpmnXMLConstants {
@@ -394,4 +399,65 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     }
     return false;
   }
+  
+  public static void writeDataInput(DataInput input, XMLStreamWriter xtw) throws Exception {
+	  xtw.writeEmptyElement(ELEMENT_DATA_INPUT);
+	  writeDefaultAttribute(ATTRIBUTE_ID, input.getId(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_NAME, input.getName(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_DATA_SUBJECT_REF, input.getItemSubjectRef(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_ISCOLLECTION, String.valueOf(input.isCollection()), xtw);
+  }
+  
+  public static void writeDataOutput(DataOutput output, XMLStreamWriter xtw) throws Exception {
+	  xtw.writeEmptyElement(ELEMENT_DATA_OUTPUT);
+	  writeDefaultAttribute(ATTRIBUTE_ID, output.getId(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_NAME, output.getName(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_DATA_SUBJECT_REF, output.getItemSubjectRef(), xtw);
+	  writeDefaultAttribute(ATTRIBUTE_ISCOLLECTION, String.valueOf(output.isCollection()), xtw);
+  }
+  
+  public static void writeDataInputSet(DataInputSet set, XMLStreamWriter xtw) throws Exception {
+	  xtw.writeStartElement(ELEMENT_DATA_INPUTSET);
+	  for (String value : set.getDataInputRefs()) {
+		  writeDataInputRefs(value, xtw);
+	  }
+	  xtw.writeEndElement();
+  }
+  
+  public static void writeDataOutputSet(DataOutputSet set, XMLStreamWriter xtw) throws Exception {
+	  xtw.writeStartElement(ELEMENT_DATA_OUTPUTSET);
+	  for (String value : set.getDataOutputRefs()) {
+		  writeDataOutputRefs(value, xtw);
+	  }
+	  xtw.writeEndElement();
+  }
+  
+  public static void writeIOSpecification(IOSpecification iospec, XMLStreamWriter xtw) throws Exception {
+	  if (iospec != null) {
+		  xtw.writeStartElement(ELEMENT_IOSPECIFICATION);
+		  if (iospec.getDataInputs() != null && iospec.getDataInputs().size() > 0) {
+			  for (DataInput data : iospec.getDataInputs()) {
+				  writeDataInput(data, xtw);
+			  }
+		  }
+		  if (iospec.getDataOutputs() != null && iospec.getDataOutputs().size() > 0) {
+			  for (DataOutput data : iospec.getDataOutputs()) {
+				  writeDataOutput(data, xtw);
+			  }
+		  }
+		  writeDataInputSet(iospec.getDataInputSet(), xtw);
+		  writeDataOutputSet(iospec.getDataOutputSet(), xtw);
+		  xtw.writeEndElement();
+	  }
+  }
+  
+  public static void writeDataInputRefs(String value, XMLStreamWriter xtw) throws Exception {
+	  writeElementWithText(ELEMENT_DATA_INPUT_REFS, value, xtw);
+  }
+  
+  public static void writeDataOutputRefs(String value, XMLStreamWriter xtw) throws Exception {
+	  writeElementWithText(ELEMENT_DATA_OUTPUT_REFS, value, xtw);
+  }
+  
+  
 }

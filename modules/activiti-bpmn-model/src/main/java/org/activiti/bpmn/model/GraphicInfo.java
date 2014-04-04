@@ -24,6 +24,8 @@ public class GraphicInfo {
   protected double width;
   protected FlowElement element;
   protected Boolean expanded;
+  protected Boolean horizontal;
+  
   protected int xmlRowNumber;
   protected int xmlColumnNumber;
   public double getX() {
@@ -56,7 +58,13 @@ public class GraphicInfo {
   public void setExpanded(Boolean expanded) {
     this.expanded = expanded;
   }
-  public FlowElement getElement() {
+  public Boolean getHorizontal() {
+	return horizontal;
+}
+public void setHorizontal(Boolean horizontal) {
+	this.horizontal = horizontal;
+}
+public FlowElement getElement() {
     return element;
   }
   public void setElement(FlowElement element) {

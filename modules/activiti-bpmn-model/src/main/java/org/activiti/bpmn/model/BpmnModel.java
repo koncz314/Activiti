@@ -12,6 +12,8 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.DataObjectContainer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -38,6 +40,7 @@ public class BpmnModel {
 	protected Map<String, Message> messageMap = new LinkedHashMap<String, Message>();
 	protected Map<String, BPMNError> errorMap = new LinkedHashMap<String, BPMNError>();
 	protected Map<String, ItemDefinition> itemDefinitionMap = new LinkedHashMap<String, ItemDefinition>();
+	protected Map<String, Resource> resourceMap = new LinkedHashMap<String, Resource>();
 	protected Map<String, EventDefinition> eventDefintionMap = new LinkedHashMap<String, EventDefinition>();
 	protected Map<String, Category> categoryMap = new LinkedHashMap<String, Category>();
 	protected Map<String, Group> groupMap = new LinkedHashMap<String, Group>();
@@ -64,6 +67,7 @@ public class BpmnModel {
 	    //return getProcess(null);
 		//  return getProcess(getPools().get(0).getId());
 	  //}
+		
 	}
 
 	public Process getProcess(String poolRef) {
@@ -171,6 +175,60 @@ public class BpmnModel {
     }
     return foundFlowElement;
 	}
+	
+	public Collection<DataObject> collectVisibleDataObjectForElement(String id) {
+		List<DataObject> dataObjects = null;
+		for (Process process : processes) {
+			if (process.getFlowElement(id) != null) {
+				return process.getAllDataObjects();
+		    }
+		}
+		boolean foundFlowElement = false;
+		List<DataObjectContainer> path = new ArrayList<DataObjectContainer>();
+		for (Process process : processes) {
+			path.add(process);
+			for (FlowElement flowElement : process.findFlowElementsOfType(SubProcess.class)) {
+				foundFlowElement = exploreSubprocess(id, (SubProcess) flowElement, path);
+				if (foundFlowElement != false) {
+					break;
+				}
+			}
+			if (foundFlowElement != false) {
+				break;
+			}
+			path.remove(process);
+		}
+		
+		if (foundFlowElement) {
+			dataObjects = new ArrayList<DataObject>();
+			for (DataObjectContainer container : path) {
+				dataObjects.addAll(container.getAllDataObjects());
+			}
+			return dataObjects;
+		}
+		
+		return null;
+	}
+	
+	private boolean exploreSubprocess(String id, SubProcess subProcess, List<DataObjectContainer> path) {
+		path.add(subProcess);
+		Boolean foundFlowElement = subProcess.getFlowElement(id) == null ? false : true;
+		if (foundFlowElement == false) {
+		      for (FlowElement flowElement : subProcess.getFlowElements()) {
+		        if (flowElement instanceof SubProcess) {
+		          foundFlowElement = exploreSubprocess(id, (SubProcess) flowElement, path);
+		          if (foundFlowElement == true) {
+		            break;
+		          }
+		        }
+		      }
+		    }
+		if (foundFlowElement == false) {
+			path.remove(subProcess);
+		}
+		return foundFlowElement;
+	}
+	
 	
 	public Artifact getArtifact(String id) {
 	  Artifact foundArtifact = null;
@@ -355,6 +413,33 @@ public class BpmnModel {
     return itemDefinitionMap.containsKey(id);
   }
 
+  public Collection<Resource> getResources() {
+	return resourceMap.values();
+  }
+	  
+  public void setResources(Collection<Resource> resourceList) {
+	if (resourceList != null) {
+		resourceMap.clear();
+		for (Resource resoure : resourceList) {
+			addResource(resoure);
+		}
+	}
+  }
+
+  public void addResource(Resource resource) {
+	if (resource != null && StringUtils.isNotEmpty(resource.getId())) {
+		resourceMap.put(resource.getId(), resource);
+	}
+  }
+	  
+  public boolean containsResourceId(String id) {
+	return resourceMap.containsKey(id);
+  }
+  
+  public Resource getResource(String id) {
+	return resourceMap.get(id);
+  }
+  
   public List<Pool> getPools() {
     return pools;
   }

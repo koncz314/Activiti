@@ -15,14 +15,11 @@ package org.activiti.bpmn.converter.export;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
-import org.activiti.bpmn.model.DataObject;
 import org.activiti.bpmn.model.ExtensionAttribute;
-import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.Process;
 import org.apache.commons.lang3.StringUtils;
 

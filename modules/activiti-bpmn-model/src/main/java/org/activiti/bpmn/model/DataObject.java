@@ -1,7 +1,9 @@
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.IData;
 
-public class DataObject extends FlowElement {
+
+public class DataObject extends FlowElement implements IData {
   
   protected String itemSubjectRef;
   protected boolean isCollection = false;

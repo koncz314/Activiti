@@ -20,6 +20,9 @@ import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.GraphicInfo;
+import org.activiti.bpmn.model.Lane;
+import org.activiti.bpmn.model.Pool;
+import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SubProcess;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,6 +45,7 @@ public class BPMNDIExport implements BpmnXMLConstants {
     xtw.writeAttribute(ATTRIBUTE_DI_BPMNELEMENT, processId);
     xtw.writeAttribute(ATTRIBUTE_ID, "BPMNPlane_" + processId);
     
+    System.out.println("DI EXPORT");
     for (String elementId : model.getLocationMap().keySet()) {
       
       if (model.getFlowElement(elementId) != null || model.getArtifact(elementId) != null || 
@@ -55,6 +59,33 @@ public class BPMNDIExport implements BpmnXMLConstants {
         FlowElement flowElement = model.getFlowElement(elementId);
         if (flowElement != null && flowElement instanceof SubProcess && graphicInfo.getExpanded() != null) {
           xtw.writeAttribute(ATTRIBUTE_DI_IS_EXPANDED, String.valueOf(graphicInfo.getExpanded()));
+        }
+        
+        if (flowElement == null) {
+        	boolean foundLane = false;
+        	for (Pool pool : model.getPools()) {
+        		if (foundLane) {
+        			break;
+        		}
+        		if (elementId.equals(pool.getId())) {
+        			if (graphicInfo.getHorizontal() != null) {
+        				xtw.writeAttribute(ATTRIBUTE_DI_IS_HORIZONTAL, String.valueOf(graphicInfo.getHorizontal()));
+        			}
+        		} else {
+        			Process process = model.getProcess(pool.getId());
+        			if (process != null) {
+        				for (Lane lane : process.getLanes()) {
+        					if (elementId.equals(lane.getId())) {
+        						foundLane = true;
+        						if (graphicInfo.getHorizontal() != null) {
+        	        				xtw.writeAttribute(ATTRIBUTE_DI_IS_HORIZONTAL, String.valueOf(graphicInfo.getHorizontal()));
+        	        			}
+        						break;
+        					}
+        				}
+        			}
+        		}
+        	}
         }
         
         xtw.writeStartElement(OMGDC_PREFIX, ELEMENT_DI_BOUNDS, OMGDC_NAMESPACE);

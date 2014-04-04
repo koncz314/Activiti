@@ -1,12 +1,13 @@
 package org.activiti.bpmn.converter.child;
 
+import hu.clickandlike.bpmn.model.interfaces.DataObjectContainer;
+
 import javax.xml.stream.XMLStreamReader;
 
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.DataObject;
-import org.activiti.bpmn.model.DataObjectContainer;
 
 public class DataObjectParser extends BaseChildElementParser {
 

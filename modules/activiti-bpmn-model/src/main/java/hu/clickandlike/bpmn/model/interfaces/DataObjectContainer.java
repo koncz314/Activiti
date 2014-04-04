@@ -1,6 +1,8 @@
-package org.activiti.bpmn.model;
+package hu.clickandlike.bpmn.model.interfaces;
 
 import java.util.Collection;
+
+import org.activiti.bpmn.model.DataObject;
 
 public interface DataObjectContainer {
 	public void addDataObject(DataObject data);

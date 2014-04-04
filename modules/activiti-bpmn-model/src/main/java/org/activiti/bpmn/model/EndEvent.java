@@ -15,7 +15,7 @@ package org.activiti.bpmn.model;
 /**
  * @author Tijs Rademakers
  */
-public class EndEvent extends Event {
+public class EndEvent extends ThrowEvent {
 
   public EndEvent clone() {
     EndEvent clone = new EndEvent();

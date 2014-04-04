@@ -63,8 +63,9 @@ public class ExtensionElement extends BaseElement {
   }
   
   public void setValues(ExtensionElement otherElement) {
-    setName(otherElement.getName());
-    setNamespace(otherElement.getNamespacePrefix());
+    super.setValues(otherElement);
+	setName(otherElement.getName());
+    setNamespacePrefix(otherElement.getNamespacePrefix());
     setNamespace(otherElement.getNamespace());
     setElementText(otherElement.getElementText());
     

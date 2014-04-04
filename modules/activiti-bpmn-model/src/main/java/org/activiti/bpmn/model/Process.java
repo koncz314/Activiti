@@ -12,6 +12,9 @@
  */
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.DataObjectContainer;
+import hu.clickandlike.bpmn.model.interfaces.IResourceRoleContainer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -21,7 +24,7 @@ import java.util.Map;
 /**
  * @author Tijs Rademakers
  */
-public class Process extends BaseElement implements FlowElementsContainer, HasExecutionListeners, DataObjectContainer {
+public class Process extends BaseElement implements FlowElementsContainer, HasExecutionListeners, DataObjectContainer, IResourceRoleContainer {
 
   protected String name;
   protected boolean executable = true;
@@ -35,6 +38,7 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
   protected List<String> candidateStarterGroups = new ArrayList<String>();
   protected List<EventListener> eventListeners = new ArrayList<EventListener>();
   protected Map<String,DataObject> dataObjectMap = new LinkedHashMap<String, DataObject>();
+  protected Map<String,ResourceRole> roleMap = new LinkedHashMap<String, ResourceRole>();
   public String getDocumentation() {
     return documentation;
   }
@@ -210,6 +214,27 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
 	  return dataObjectMap.keySet();
   }
   
+  public void addResourceRole(ResourceRole role) {
+	  roleMap.put(role.getId(), role);
+  }
+
+  public boolean containsResourceRole(ResourceRole role) {
+	  return roleMap.containsKey(role.getId());
+  }
+
+  public ResourceRole getResourceRole(String id) {
+	  return roleMap.get(id);
+  }
+
+  public Collection<ResourceRole> getAllResourceRoles() {
+	  return roleMap.values();
+  }
+
+  public Collection<String> getResourceRoleIds() {
+	  return roleMap.keySet();
+  }
+  
+  
   public Process clone() {
     Process clone = new Process();
     clone.setValues(this);
@@ -252,6 +277,11 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     dataObjectMap = new LinkedHashMap<String, DataObject>();
     for (DataObject data : otherElement.getAllDataObjects()) {
     	dataObjectMap.put(data.getId(), data.clone());
+    }
+    
+    roleMap = new LinkedHashMap<String, ResourceRole>();
+    for (ResourceRole role : otherElement.getAllResourceRoles()) {
+    	roleMap.put(role.getId(), role.clone());
     }
     
   }
