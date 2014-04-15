@@ -1,13 +1,16 @@
 package org.activiti.bpmn.model;
 
+import hu.clickandlike.bpmn.model.interfaces.PerformerType;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ResourceRole extends BaseElement {
+public class ResourceRole extends BaseElement {
 	protected String name;
 	protected String resourceRef;
 	protected List<ResourceParameterBinding> resourceParameterBindings;
 	protected ResourceAssignmentExpression resourceAssignmentExpression;
+	protected PerformerType performerType;
 	
 	public String getName() {
 		return name;
@@ -69,13 +72,26 @@ public abstract class ResourceRole extends BaseElement {
 
 	
 	
+	public PerformerType getPerformerType() {
+		return performerType;
+	}
+
+	public void setPerformerType(PerformerType performerType) {
+		this.performerType = performerType;
+	}
+
 	@Override
-	public abstract ResourceRole clone();
+	public ResourceRole clone() {
+		ResourceRole newRole = new ResourceRole();
+		newRole.setValues(this);
+		return newRole;
+	}
 
 	public void setValues(ResourceRole otherRole) {
 		super.setValues(otherRole);
 		setName(otherRole.getName());
 		setResourceRef(otherRole.getResourceRef());
+		setPerformerType(otherRole.getPerformerType());
 		if (otherRole.getResourceAssignmentExpression() != null) {
 			setResourceAssignmentExpression(otherRole.getResourceAssignmentExpression().clone());
 		}

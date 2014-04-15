@@ -168,8 +168,11 @@ public interface BpmnXMLConstants {
   
   public static final String ELEMENT_MULTIINSTANCE = "multiInstanceLoopCharacteristics";
   public static final String ELEMENT_MULTIINSTANCE_CARDINALITY = "loopCardinality";
-  public static final String ELEMENT_MULTIINSTANCE_DATAINPUT = "loopDataInputRef";
-  public static final String ELEMENT_MULTIINSTANCE_DATAITEM = "inputDataItem";
+  public static final String ELEMENT_LOOP_DATA_INPUT_REF = "loopDataInputRef";
+  public static final String ELEMENT_LOOP_DATA_OUTPUT_REF = "loopDataOutputRef";
+  public static final String ELEMENT_INPUT_DATAITEM = "inputDataItem";
+  public static final String ELEMENT_OUTPUT_DATAITEM = "outputDataItem";
+  
   public static final String ELEMENT_MULTIINSTANCE_CONDITION = "completionCondition";
   public static final String ATTRIBUTE_MULTIINSTANCE_SEQUENTIAL = "isSequential";
   public static final String ATTRIBUTE_MULTIINSTANCE_COLLECTION = "collection";

@@ -5,9 +5,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.model.Expression;
 import org.activiti.bpmn.model.FormalExpression;
-import org.activiti.bpmn.model.HumanPerformer;
-import org.activiti.bpmn.model.Performer;
-import org.activiti.bpmn.model.PotentialOwner;
 import org.activiti.bpmn.model.ResourceAssignmentExpression;
 import org.activiti.bpmn.model.ResourceParameterBinding;
 import org.activiti.bpmn.model.ResourceRole;
@@ -15,13 +12,20 @@ import org.activiti.bpmn.model.ResourceRole;
 public class ResourceRoleExport extends ExportHelper implements BpmnXMLConstants {
 	public static void writeResourceRole(ResourceRole role, XMLStreamWriter xtw) throws Exception {
 		if (role != null) {
-			if (role instanceof Performer) {
+			switch (role.getPerformerType()) {
+			case PERFORMER:
 				xtw.writeStartElement(ELEMENT_PERFORMER);
-			} else if (role instanceof HumanPerformer) {
+				break;
+			case HUMAN_PERFORMER:
 				xtw.writeStartElement(ELEMENT_HUMAN_PERFORMER);
-			} else if (role instanceof PotentialOwner) {
+				break;
+			case POTENTIAL_OWNER:
 				xtw.writeStartElement(ELEMENT_POTENTIAL_OWNER);
+				break;
+			default:
+				break;
 			}
+			
 			writeDefaultAttribute(ATTRIBUTE_ID, role.getId(), xtw);
 			writeDefaultAttribute(ATTRIBUTE_NAME, role.getName(), xtw);
 			writeElementWithText(ELEMENT_RESOURCE_REF, role.getResourceRef(), xtw);

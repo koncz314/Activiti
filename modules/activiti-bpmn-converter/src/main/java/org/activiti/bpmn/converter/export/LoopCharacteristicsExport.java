@@ -17,6 +17,8 @@ import javax.xml.stream.XMLStreamWriter;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.Activity;
+import org.activiti.bpmn.model.DataInput;
+import org.activiti.bpmn.model.DataOutput;
 import org.activiti.bpmn.model.LoopCharacteristics;
 import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
 import org.activiti.bpmn.model.StandardLoopCharacteristics;
@@ -55,23 +57,63 @@ public class LoopCharacteristicsExport implements BpmnXMLConstants {
   private static void writeMultiInstance(LoopCharacteristics loopCharacteristic, XMLStreamWriter xtw) throws Exception {
     
       MultiInstanceLoopCharacteristics multiInstanceObject = (MultiInstanceLoopCharacteristics)loopCharacteristic;
-      if (StringUtils.isNotEmpty(multiInstanceObject.getLoopCardinality()) ||
-          StringUtils.isNotEmpty(multiInstanceObject.getInputDataItem()) ||
-          StringUtils.isNotEmpty(multiInstanceObject.getCompletionCondition())) {
+      if (multiInstanceObject != null) {
         
         xtw.writeStartElement(ELEMENT_MULTIINSTANCE);
         BpmnXMLUtil.writeDefaultAttribute(ATTRIBUTE_MULTIINSTANCE_SEQUENTIAL, String.valueOf(multiInstanceObject.isSequential()).toLowerCase(), xtw);
-        if (StringUtils.isNotEmpty(multiInstanceObject.getInputDataItem())) {
+        /*if (StringUtils.isNotEmpty(multiInstanceObject.getInputDataItem())) {
           BpmnXMLUtil.writeQualifiedAttribute(ATTRIBUTE_MULTIINSTANCE_COLLECTION, multiInstanceObject.getInputDataItem(), xtw);
         }
         if (StringUtils.isNotEmpty(multiInstanceObject.getElementVariable())) {
           BpmnXMLUtil.writeQualifiedAttribute(ATTRIBUTE_MULTIINSTANCE_VARIABLE, multiInstanceObject.getElementVariable(), xtw);
-        }
+        }*/
         if (StringUtils.isNotEmpty(multiInstanceObject.getLoopCardinality())) {
           xtw.writeStartElement(ELEMENT_MULTIINSTANCE_CARDINALITY);
           xtw.writeCharacters(multiInstanceObject.getLoopCardinality());
           xtw.writeEndElement();
         }
+        
+        if (StringUtils.isNotEmpty(multiInstanceObject.getLoopDataInputRef())) {
+			BpmnXMLUtil.writeElementWithText(ELEMENT_LOOP_DATA_INPUT_REF, multiInstanceObject.getLoopDataInputRef(), xtw);
+		}
+        if (StringUtils.isNotEmpty(multiInstanceObject.getLoopDataOutputRef())) {
+			BpmnXMLUtil.writeElementWithText(ELEMENT_LOOP_DATA_OUTPUT_REF, multiInstanceObject.getLoopDataOutputRef(), xtw);
+		}
+        
+        if (multiInstanceObject.getInputDataItem() != null) {
+        	xtw.writeEmptyElement(ELEMENT_INPUT_DATAITEM);
+        	DataInput input = multiInstanceObject.getInputDataItem();
+        	if (StringUtils.isNotEmpty(input.getId())) {
+				xtw.writeAttribute(ATTRIBUTE_ID, input.getId());
+			}
+        	if (StringUtils.isNotEmpty(input.getName())) {
+				xtw.writeAttribute(ATTRIBUTE_NAME, input.getName());
+			}
+        	if (StringUtils.isNotEmpty(input.getItemSubjectRef())) {
+				xtw.writeAttribute(ATTRIBUTE_DATA_SUBJECT_REF, input.getItemSubjectRef());
+			}
+    
+			xtw.writeAttribute(ATTRIBUTE_ISCOLLECTION, String.valueOf(input.isCollection()));
+			
+        }
+        
+        if (multiInstanceObject.getOutputDataItem() != null) {
+        	xtw.writeEmptyElement(ELEMENT_OUTPUT_DATAITEM);
+        	DataOutput output = multiInstanceObject.getOutputDataItem();
+        	if (StringUtils.isNotEmpty(output.getId())) {
+				xtw.writeAttribute(ATTRIBUTE_ID, output.getId());
+			}
+        	if (StringUtils.isNotEmpty(output.getName())) {
+				xtw.writeAttribute(ATTRIBUTE_NAME, output.getName());
+			}
+        	if (StringUtils.isNotEmpty(output.getItemSubjectRef())) {
+				xtw.writeAttribute(ATTRIBUTE_DATA_SUBJECT_REF, output.getItemSubjectRef());
+			}
+    
+			xtw.writeAttribute(ATTRIBUTE_ISCOLLECTION, String.valueOf(output.isCollection()));
+			
+        }
+        
         if (StringUtils.isNotEmpty(multiInstanceObject.getCompletionCondition())) {
           xtw.writeStartElement(ELEMENT_MULTIINSTANCE_CONDITION);
           xtw.writeCharacters(multiInstanceObject.getCompletionCondition());

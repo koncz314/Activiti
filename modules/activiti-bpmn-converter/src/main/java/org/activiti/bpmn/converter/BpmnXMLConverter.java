@@ -305,7 +305,13 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
 					    model.addNamespace(prefix, xtr.getNamespaceURI(i));
 					  }
 					}
-				
+					if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_ID))) {
+						model.setId(xtr.getAttributeValue(null, ATTRIBUTE_ID));
+					}
+					if (StringUtils.isNotEmpty(xtr.getAttributeValue(null, ATTRIBUTE_NAME))) {
+						model.setName(xtr.getAttributeValue(null, ATTRIBUTE_NAME));
+					}
+					
 				} else if (ELEMENT_SIGNAL.equals(xtr.getLocalName())) {
 					new SignalParser().parse(xtr, model);
 					
@@ -533,18 +539,17 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
       PoolExport.writePools(model, xtw);
       
       for (Process process : model.getProcesses()) {
-    	for (DataObject data : process.getAllDataObjects()) {
-            	DataObjectExport.writeDataObject(data, xtw);
-        }
+    	
         if(process.getFlowElements().size() == 0 && process.getLanes().size() == 0) {
           // empty process, ignore it 
           continue;
         }
       
         ProcessExport.writeProcess(process, xtw);
-        
-        
-        
+        for (DataObject data : process.getAllDataObjects()) {
+        	DataObjectExport.writeDataObject(data, xtw);
+        }	
+    
         for (FlowElement flowElement : process.getFlowElements()) {
           createXML(flowElement, model, xtw);
         }
@@ -553,7 +558,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
           createXML(artifact, model, xtw);
         }
         
-        for (ResourceRole role : process.getAllResourceRoles()) {
+        for (ResourceRole role : process.getResourceRoles()) {
 			ResourceRoleExport.writeResourceRole(role, xtw);
 		}
         
@@ -620,7 +625,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
     	  DataAssociationExport.writeDataAssociations(false, ass, xtw);
       }
       
-      for (ResourceRole role : subProcess.getAllResourceRoles()) {
+      for (ResourceRole role : subProcess.getResourceRoles()) {
 			ResourceRoleExport.writeResourceRole(role, xtw);
 		}
       

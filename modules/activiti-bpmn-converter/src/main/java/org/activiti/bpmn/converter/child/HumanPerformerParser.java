@@ -1,7 +1,7 @@
 package org.activiti.bpmn.converter.child;
 
-import org.activiti.bpmn.model.HumanPerformer;
-import org.activiti.bpmn.model.ResourceRole;
+import hu.clickandlike.bpmn.model.interfaces.PerformerType;
+
 
 public class HumanPerformerParser extends ResourceRoleParser {
 
@@ -11,8 +11,10 @@ public class HumanPerformerParser extends ResourceRoleParser {
 	}
 
 	@Override
-	protected ResourceRole getNewInstance() {
-		return new HumanPerformer();
+	public PerformerType getPerformerType() {
+		return PerformerType.HUMAN_PERFORMER;
 	}
+
+
 
 }

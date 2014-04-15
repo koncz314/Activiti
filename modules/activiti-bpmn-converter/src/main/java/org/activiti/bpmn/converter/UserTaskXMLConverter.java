@@ -21,9 +21,11 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.converter.child.HumanPerformerParser;
 import org.activiti.bpmn.converter.child.PotentialOwnerParser;
+import org.activiti.bpmn.converter.child.RenderingParser;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.ExtensionAttribute;
+import org.activiti.bpmn.model.Rendering;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.bpmn.model.alfresco.AlfrescoUserTask;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +52,8 @@ public class UserTaskXMLConverter extends ActivityXMLConverter {
     childElementParsers.put(humanPerformerParser.getElementName(), humanPerformerParser);
     PotentialOwnerParser potentialOwnerParser = new PotentialOwnerParser();
     childElementParsers.put(potentialOwnerParser.getElementName(), potentialOwnerParser);
+    RenderingParser renderingParser = new RenderingParser();
+    childElementParsers.put(renderingParser.getElementName(), renderingParser);
   }
   
   public static String getXMLType() {
@@ -128,17 +132,31 @@ public class UserTaskXMLConverter extends ActivityXMLConverter {
   protected void writeExtensionChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
     UserTask userTask = (UserTask) element;
     writeFormProperties(userTask, xtw);
+    
   }
 
   @Override
   protected void writeAdditionalChildElements(BaseElement element, XMLStreamWriter xtw) throws Exception {
 	  super.writeAdditionalChildElements(element, xtw);
+	  UserTask userTask = (UserTask) element;
+	  writeRendering(userTask.getRendering(), xtw);
   }
   
   public void addFormType(String formType) {
     if (StringUtils.isNotEmpty(formType)) {
       formTypes.add(formType);
     }
+  }
+  
+  public void writeRendering(Rendering rendering, XMLStreamWriter xtw) throws Exception {
+	  if (rendering != null && rendering.getExtensionElements().keySet() != null) {
+		  xtw.writeStartElement("rendering");
+		  boolean didWriteExtensionStartElement = BpmnXMLUtil.writeExtensionElements(rendering, false, xtw);
+		    if (didWriteExtensionStartElement) {
+		      xtw.writeEndElement();
+		    }
+		    xtw.writeEndElement();
+	    }
   }
   
   /*

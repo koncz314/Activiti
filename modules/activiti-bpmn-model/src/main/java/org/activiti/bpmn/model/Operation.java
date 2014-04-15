@@ -10,6 +10,7 @@ public class Operation extends BaseElement {
   protected String inMessageRef;
   protected String outMessageRef;
   protected List<String> errorMessageRef = new ArrayList<String>();
+  protected String parentInterfaceName;
   
   public String getName() {
     return name;
@@ -42,7 +43,13 @@ public class Operation extends BaseElement {
     this.errorMessageRef = errorMessageRef;
   }
   
-  public Operation clone() {
+  public String getParentInterfaceName() {
+	return parentInterfaceName;
+}
+public void setParentInterfaceName(String parentInterfaceName) {
+	this.parentInterfaceName = parentInterfaceName;
+}
+public Operation clone() {
     Operation clone = new Operation();
     clone.setValues(this);
     return clone;
@@ -54,7 +61,7 @@ public class Operation extends BaseElement {
     setImplementationRef(otherElement.getImplementationRef());
     setInMessageRef(otherElement.getInMessageRef());
     setOutMessageRef(otherElement.getOutMessageRef());
-    
+    setParentInterfaceName(otherElement.getParentInterfaceName());
     errorMessageRef = new ArrayList<String>();
     if (otherElement.getErrorMessageRef() != null && otherElement.getErrorMessageRef().size() > 0) {
       errorMessageRef.addAll(otherElement.getErrorMessageRef());

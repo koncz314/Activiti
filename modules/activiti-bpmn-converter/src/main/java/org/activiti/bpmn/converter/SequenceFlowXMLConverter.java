@@ -56,6 +56,7 @@ public class SequenceFlowXMLConverter extends BaseBpmnXMLConverter {
     SequenceFlow sequenceFlow = (SequenceFlow) element;
     writeDefaultAttribute(ATTRIBUTE_FLOW_SOURCE_REF, sequenceFlow.getSourceRef(), xtw);
     writeDefaultAttribute(ATTRIBUTE_FLOW_TARGET_REF, sequenceFlow.getTargetRef(), xtw);
+    writeDefaultAttribute(ATTRIBUTE_NAME, sequenceFlow.getName(), xtw);
   }
   
   @Override

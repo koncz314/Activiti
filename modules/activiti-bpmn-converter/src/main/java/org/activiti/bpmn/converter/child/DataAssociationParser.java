@@ -23,6 +23,7 @@ public class DataAssociationParser implements BpmnXMLConstants {
         xtr.next();
         if (xtr.isStartElement() && ELEMENT_SOURCE_REF.equals(xtr.getLocalName())) {
           String sourceRef = xtr.getElementText();
+          //System.out.println("SOURCEREF: "+ sourceRef);
           if (StringUtils.isNotEmpty(sourceRef)) {
             dataAssociation.setSourceRef(sourceRef.trim());
           }

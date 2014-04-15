@@ -32,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class BpmnModel {
   
+	protected String id;
+	protected String name;
 	protected List<Process> processes = new ArrayList<Process>();
 	protected Map<String, GraphicInfo> locationMap = new LinkedHashMap<String, GraphicInfo>();
 	protected Map<String, GraphicInfo> labelLocationMap = new LinkedHashMap<String, GraphicInfo>();
@@ -45,6 +47,7 @@ public class BpmnModel {
 	protected Map<String, Category> categoryMap = new LinkedHashMap<String, Category>();
 	protected Map<String, Group> groupMap = new LinkedHashMap<String, Group>();
 	
+	protected Map<String, BaseElement> idHolder = new LinkedHashMap<String, BaseElement>();
 	
 	protected List<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 	
@@ -57,6 +60,57 @@ public class BpmnModel {
 	protected Map<String, String> namespaceMap = new LinkedHashMap<String, String>();
 	protected String targetNamespace;
 	protected int nextFlowIdCounter = 1;
+
+	public boolean registerModelElementId(BaseElement element) {
+		if (element != null && StringUtils.isNotEmpty(element.getId())) {
+			if (isRegisteredId(element)) {
+				return false;
+			} else {
+				idHolder.put(element.getId(), element);
+				return true;
+			}
+		} else {
+			return false;
+		}
+		
+	}
+	
+	public boolean isRegisteredId(BaseElement element) {
+		if (element == null || StringUtils.isEmpty(element.getId())) {
+			return false;
+		} else {
+			return idHolder.containsKey(element.getId());
+		}
+	}
+	public boolean isRegisteredId(String id) {
+		return idHolder.containsKey(id);
+	}
+	
+	public void removeModelElementId(BaseElement element) {
+		if (element != null && StringUtils.isNotEmpty(element.getId())) {
+			idHolder.remove(element.getId());
+		}
+	}
+	
+	public void removeModelElementId(String id) {
+		idHolder.remove(id);
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Process getMainProcess() {
 	  //if (getPools().size() > 0) {

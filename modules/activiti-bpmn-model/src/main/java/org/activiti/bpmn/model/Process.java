@@ -28,6 +28,8 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
 
   protected String name;
   protected boolean executable = true;
+  protected boolean closed = false;
+  protected String processType;
   protected String documentation;
   protected IOSpecification ioSpecification;
   protected List<ActivitiListener> executionListeners = new ArrayList<ActivitiListener>();
@@ -38,7 +40,8 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
   protected List<String> candidateStarterGroups = new ArrayList<String>();
   protected List<EventListener> eventListeners = new ArrayList<EventListener>();
   protected Map<String,DataObject> dataObjectMap = new LinkedHashMap<String, DataObject>();
-  protected Map<String,ResourceRole> roleMap = new LinkedHashMap<String, ResourceRole>();
+  protected List<ResourceRole> resourceRoles = new ArrayList<ResourceRole>();
+  
   public String getDocumentation() {
     return documentation;
   }
@@ -63,7 +66,23 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     this.executable = executable;
   }
 
-  public IOSpecification getIoSpecification() {
+  public boolean isClosed() {
+	return closed;
+}
+
+public void setClosed(boolean closed) {
+	this.closed = closed;
+}
+
+public String getProcessType() {
+	return processType;
+}
+
+public void setProcessType(String processType) {
+	this.processType = processType;
+}
+
+public IOSpecification getIoSpecification() {
     return ioSpecification;
   }
 
@@ -214,24 +233,14 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
 	  return dataObjectMap.keySet();
   }
   
-  public void addResourceRole(ResourceRole role) {
-	  roleMap.put(role.getId(), role);
+  @Override
+  public void setResourceRoles(List<ResourceRole> roleList) {
+	this.resourceRoles = roleList;
+	
   }
-
-  public boolean containsResourceRole(ResourceRole role) {
-	  return roleMap.containsKey(role.getId());
-  }
-
-  public ResourceRole getResourceRole(String id) {
-	  return roleMap.get(id);
-  }
-
-  public Collection<ResourceRole> getAllResourceRoles() {
-	  return roleMap.values();
-  }
-
-  public Collection<String> getResourceRoleIds() {
-	  return roleMap.keySet();
+  @Override
+  public List<ResourceRole> getResourceRoles() {
+	return resourceRoles;
   }
   
   
@@ -247,6 +256,8 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     setName(otherElement.getName());
     setExecutable(otherElement.isExecutable());
     setDocumentation(otherElement.getDocumentation());
+    setClosed(otherElement.isClosed());
+    setProcessType(otherElement.getProcessType());
     if (otherElement.getIoSpecification() != null) {
       setIoSpecification(otherElement.getIoSpecification().clone());
     }
@@ -279,9 +290,9 @@ public class Process extends BaseElement implements FlowElementsContainer, HasEx
     	dataObjectMap.put(data.getId(), data.clone());
     }
     
-    roleMap = new LinkedHashMap<String, ResourceRole>();
-    for (ResourceRole role : otherElement.getAllResourceRoles()) {
-    	roleMap.put(role.getId(), role.clone());
+    resourceRoles = new ArrayList<ResourceRole>();
+    for (ResourceRole role : otherElement.getResourceRoles()) {
+    	resourceRoles.add(role.clone());
     }
     
   }

@@ -60,7 +60,7 @@ public class ServiceTaskXMLConverter extends ActivityXMLConverter {
 		
 		} else if ("##WebService".equals(xtr.getAttributeValue(null, ATTRIBUTE_TASK_IMPLEMENTATION))) {
 		  serviceTask.setImplementationType(ImplementationType.IMPLEMENTATION_TYPE_WEBSERVICE);
-		  serviceTask.setOperationRef(parseOperationRef(xtr.getAttributeValue(null, ATTRIBUTE_TASK_OPERATION_REF), model));
+		  serviceTask.setOperationRef(xtr.getAttributeValue(null, ATTRIBUTE_TASK_OPERATION_REF));
 		}
 	
 		serviceTask.setResultVariableName(xtr.getAttributeValue(ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_TASK_SERVICE_RESULTVARIABLE));
@@ -94,6 +94,17 @@ public class ServiceTaskXMLConverter extends ActivityXMLConverter {
     } else if (ImplementationType.IMPLEMENTATION_TYPE_DELEGATEEXPRESSION.equals(serviceTask.getImplementationType())) {
       writeQualifiedAttribute(ATTRIBUTE_TASK_SERVICE_DELEGATEEXPRESSION, serviceTask.getImplementation(), xtw);
     }
+    
+    writeDefaultAttribute("startQuantity", "1", xtw);
+    writeDefaultAttribute("completionQuantity", "1", xtw);
+    writeDefaultAttribute("isForCompensation", "false", xtw);
+    
+    if (StringUtils.isNotEmpty(serviceTask.getImplementationType())) {
+		writeDefaultAttribute("implementation", serviceTask.getImplementationType(), xtw);
+	}
+    if (StringUtils.isNotEmpty(serviceTask.getOperationRef())) {
+		writeDefaultAttribute("operationRef", serviceTask.getOperationRef(), xtw);
+	}
     
     if (StringUtils.isNotEmpty(serviceTask.getResultVariableName())) {
       writeQualifiedAttribute(ATTRIBUTE_TASK_SERVICE_RESULTVARIABLE, serviceTask.getResultVariableName(), xtw);

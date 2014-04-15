@@ -15,10 +15,7 @@ package org.activiti.bpmn.model;
 import hu.clickandlike.bpmn.model.interfaces.IResourceRoleContainer;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Tijs Rademakers
@@ -34,7 +31,7 @@ public abstract class Activity extends FlowNode implements IResourceRoleContaine
   protected List<Property> propertys = new ArrayList<Property>();
   protected List<DataAssociation> dataInputAssociations = new ArrayList<DataAssociation>();
   protected List<DataAssociation> dataOutputAssociations = new ArrayList<DataAssociation>();
-  protected Map<String,ResourceRole> roleMap = new LinkedHashMap<String, ResourceRole>();
+  protected List<ResourceRole> resourceRoles = new ArrayList<ResourceRole>();
   protected LoopCharacteristics loopCharacteristics;
   protected List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
 
@@ -99,28 +96,17 @@ public List<DataAssociation> getDataInputAssociations() {
     this.dataOutputAssociations = dataOutputAssociations;
   }
   
-  public void addResourceRole(ResourceRole role) {
-	  roleMap.put(role.getId(), role);
+  @Override
+  public void setResourceRoles(List<ResourceRole> roleList) {
+	this.resourceRoles = roleList;
+	
   }
-
-  public boolean containsResourceRole(ResourceRole role) {
-	  return roleMap.containsKey(role.getId());
-  }
-
-  public ResourceRole getResourceRole(String id) {
-	  return roleMap.get(id);
-  }
-
-  public Collection<ResourceRole> getAllResourceRoles() {
-	  return roleMap.values();
-  }
-
-  public Collection<String> getResourceRoleIds() {
-	  return roleMap.keySet();
+  @Override
+  public List<ResourceRole> getResourceRoles() {
+	return resourceRoles;
   }
   
-  
-  public void setValues(Activity otherActivity) {
+public void setValues(Activity otherActivity) {
     super.setValues(otherActivity);
     setAsynchronous(otherActivity.isAsynchronous());
     setNotExclusive(otherActivity.isNotExclusive());
@@ -149,9 +135,9 @@ public List<DataAssociation> getDataInputAssociations() {
       }
     }
     
-    roleMap = new LinkedHashMap<String, ResourceRole>();
-    for (ResourceRole role : otherActivity.getAllResourceRoles()) {
-    	roleMap.put(role.getId(), role.clone());
+    resourceRoles = new ArrayList<ResourceRole>();
+    for (ResourceRole role : otherActivity.getResourceRoles()) {
+    	resourceRoles.add(role.clone());
     }
     
     boundaryEvents = new ArrayList<BoundaryEvent>();

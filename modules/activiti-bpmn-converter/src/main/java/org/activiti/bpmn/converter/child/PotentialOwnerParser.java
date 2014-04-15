@@ -1,6 +1,7 @@
 package org.activiti.bpmn.converter.child;
 
-import org.activiti.bpmn.model.PotentialOwner;
+import hu.clickandlike.bpmn.model.interfaces.PerformerType;
+
 import org.activiti.bpmn.model.ResourceRole;
 
 public class PotentialOwnerParser extends ResourceRoleParser {
@@ -10,9 +11,11 @@ public class PotentialOwnerParser extends ResourceRoleParser {
 		return ELEMENT_POTENTIAL_OWNER;
 	}
 
+	
+
 	@Override
-	protected ResourceRole getNewInstance() {
-		return new PotentialOwner();
+	public PerformerType getPerformerType() {
+		return PerformerType.POTENTIAL_OWNER;
 	}
 
 }

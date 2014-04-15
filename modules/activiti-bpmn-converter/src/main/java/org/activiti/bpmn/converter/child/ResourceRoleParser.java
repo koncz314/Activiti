@@ -1,6 +1,7 @@
 package org.activiti.bpmn.converter.child;
 
 import hu.clickandlike.bpmn.model.interfaces.IResourceRoleContainer;
+import hu.clickandlike.bpmn.model.interfaces.PerformerType;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -19,23 +20,25 @@ public abstract class ResourceRoleParser extends BaseChildElementParser {
 
 	@Override
 	public abstract String getElementName();
+	public abstract PerformerType getPerformerType();
 	
-	protected abstract ResourceRole getNewInstance();
+	
 
 	@Override
 	public void parseChildElement(XMLStreamReader xtr,
 			BaseElement parentElement, BpmnModel model) throws Exception {
-		ResourceRole performer = getNewInstance();
-		BpmnXMLUtil.addXMLLocation(performer, xtr);
+		ResourceRole role = new ResourceRole();
+		BpmnXMLUtil.addXMLLocation(role, xtr);
 		
+		role.setPerformerType(getPerformerType());
 		String id = xtr.getAttributeValue(null, ATTRIBUTE_ID);
 		String name = xtr.getAttributeValue(null, ATTRIBUTE_NAME);
 		
 		if (StringUtils.isNotEmpty(id)) {
-			performer.setId(id);
+			role.setId(id);
 		}
 		if (StringUtils.isNotEmpty(name)) {
-			performer.setName(name);
+			role.setName(name);
 		}
 		
 		boolean readyWithResourceRole = false;
@@ -44,14 +47,14 @@ public abstract class ResourceRoleParser extends BaseChildElementParser {
 			if (xtr.isStartElement() && xtr.getLocalName().equals(ELEMENT_RESOURCE_REF)) {
 				String resourceRef = xtr.getElementText();
 				if (StringUtils.isNotEmpty(resourceRef)) {
-					performer.setResourceRef(resourceRef);
+					role.setResourceRef(resourceRef);
 				}
 			} else if (xtr.isStartElement() && xtr.getLocalName().equals(ELEMENT_RESOURCE_PARAMETER_BINDING)) {
 				ResourceParameterBinding binding = parseResourceParameterBinding(xtr);
-				performer.addResourceParameterBinding(binding);
+				role.addResourceParameterBinding(binding);
 			} else if (xtr.isStartElement() && xtr.getLocalName().equals(ELEMENT_RESOURCE_ASSIGNMENT_EXPRESSION)) {
 				ResourceAssignmentExpression assignmentExpression = parseResourceAssignmentExpression(xtr);
-				performer.setResourceAssignmentExpression(assignmentExpression);
+				role.setResourceAssignmentExpression(assignmentExpression);
 			} else if (xtr.isEndElement() && getElementName().equals(xtr.getLocalName())) {
 				readyWithResourceRole = true;
 			}
@@ -59,7 +62,7 @@ public abstract class ResourceRoleParser extends BaseChildElementParser {
 			
 		}
 		
-		((IResourceRoleContainer)parentElement).addResourceRole(performer);
+		((IResourceRoleContainer)parentElement).getResourceRoles().add(role);
 
 	}
 

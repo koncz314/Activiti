@@ -45,6 +45,13 @@ public class DefinitionsRootExport implements BpmnXMLConstants {
       if (!defaultNamespaces.contains(prefix))
         xtw.writeNamespace( prefix, model.getNamespaces().get(prefix));
     }
+    if (StringUtils.isNotEmpty(model.getId())) {
+    	xtw.writeAttribute(ATTRIBUTE_ID, model.getId());
+	}
+    if (StringUtils.isNotEmpty(model.getName())) {
+    	xtw.writeAttribute(ATTRIBUTE_NAME, model.getName());
+	}
+    
     xtw.writeAttribute(TYPE_LANGUAGE_ATTRIBUTE, SCHEMA_NAMESPACE);
     xtw.writeAttribute(EXPRESSION_LANGUAGE_ATTRIBUTE, XPATH_NAMESPACE);
     if (StringUtils.isNotEmpty(model.getTargetNamespace())) {

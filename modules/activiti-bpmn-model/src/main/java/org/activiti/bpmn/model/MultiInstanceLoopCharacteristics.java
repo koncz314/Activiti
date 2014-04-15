@@ -18,19 +18,29 @@ package org.activiti.bpmn.model;
  */
 public class MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
-  protected String inputDataItem;
+  
   protected String loopCardinality;
-  protected String completionCondition;
-  protected String elementVariable;
-  protected String elementIndexVariable;
   protected boolean sequential;
+  protected String completionCondition;
+  protected String loopDataInputRef;
+  protected String loopDataOutputRef;
+  protected DataInput inputDataItem;
+  protected DataOutput outputDataItem;
 
-  public String getInputDataItem() {
+  public DataInput getInputDataItem() {
     return inputDataItem;
   }
-  public void setInputDataItem(String inputDataItem) {
+  public void setInputDataItem(DataInput inputDataItem) {
     this.inputDataItem = inputDataItem;
   }
+  
+  public DataOutput getOutputDataItem() {
+	return outputDataItem;
+  }
+  public void setOutputDataItem(DataOutput outputDataItem) {
+	this.outputDataItem = outputDataItem;
+  }
+  
   public String getLoopCardinality() {
     return loopCardinality;
   }
@@ -43,17 +53,17 @@ public class MultiInstanceLoopCharacteristics extends LoopCharacteristics {
   public void setCompletionCondition(String completionCondition) {
     this.completionCondition = completionCondition;
   }
-  public String getElementVariable() {
-    return elementVariable;
+  public String getLoopDataInputRef() {
+    return loopDataInputRef;
   }
-  public void setElementVariable(String elementVariable) {
-    this.elementVariable = elementVariable;
+  public void setLoopDataInputRef(String loopDataInputRef) {
+    this.loopDataInputRef = loopDataInputRef;
   }
-  public String getElementIndexVariable() {
-    return elementIndexVariable;
+  public String getLoopDataOutputRef() {
+    return loopDataOutputRef;
   }
-  public void setElementIndexVariable(String elementIndexVariable) {
-    this.elementIndexVariable = elementIndexVariable;
+  public void setLoopDataOutputRef(String loopDataOutputRef) {
+    this.loopDataOutputRef = loopDataOutputRef;
   }
   public boolean isSequential() {
     return sequential;
@@ -69,11 +79,17 @@ public class MultiInstanceLoopCharacteristics extends LoopCharacteristics {
   }
   
   public void setValues(MultiInstanceLoopCharacteristics otherLoopCharacteristics) {
-    setInputDataItem(otherLoopCharacteristics.getInputDataItem());
-    setLoopCardinality(otherLoopCharacteristics.getLoopCardinality());
+    super.setValues(otherLoopCharacteristics);
+    if (otherLoopCharacteristics.getInputDataItem() != null) {
+    	setInputDataItem(otherLoopCharacteristics.getInputDataItem().clone());
+    }
+    if (otherLoopCharacteristics.getOutputDataItem() != null) {
+    	setOutputDataItem(otherLoopCharacteristics.getOutputDataItem().clone());
+    }
+	setLoopCardinality(otherLoopCharacteristics.getLoopCardinality());
     setCompletionCondition(otherLoopCharacteristics.getCompletionCondition());
-    setElementVariable(otherLoopCharacteristics.getElementVariable());
-    setElementIndexVariable(otherLoopCharacteristics.getElementIndexVariable());
+    setLoopDataInputRef(otherLoopCharacteristics.getLoopDataInputRef());
+    setLoopDataOutputRef(otherLoopCharacteristics.getLoopDataOutputRef());
     setSequential(otherLoopCharacteristics.isSequential());
   }
 }

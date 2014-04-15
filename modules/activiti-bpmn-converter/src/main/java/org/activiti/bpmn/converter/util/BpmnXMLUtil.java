@@ -218,7 +218,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     return didWriteExtensionStartElement;
   }
   
-  protected static void writeExtensionElement(ExtensionElement extensionElement, Map<String, String> namespaceMap, XMLStreamWriter xtw) throws Exception {
+  public static void writeExtensionElement(ExtensionElement extensionElement, Map<String, String> namespaceMap, XMLStreamWriter xtw) throws Exception {
     if (StringUtils.isNotEmpty(extensionElement.getName())) {
       Map<String, String> localNamespaceMap = new HashMap<String, String>();
       if (StringUtils.isNotEmpty(extensionElement.getNamespace())) {

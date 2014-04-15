@@ -19,6 +19,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
+import org.activiti.bpmn.model.DataObject;
 import org.activiti.bpmn.model.ExtensionAttribute;
 import org.activiti.bpmn.model.Process;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,8 @@ public class ProcessExport implements BpmnXMLConstants {
       new ExtensionAttribute(ATTRIBUTE_ID),
       new ExtensionAttribute(ATTRIBUTE_NAME),
       new ExtensionAttribute(ATTRIBUTE_PROCESS_EXECUTABLE),
+      new ExtensionAttribute("isClosed"),
+      new ExtensionAttribute("processType"),
       new ExtensionAttribute(ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_PROCESS_CANDIDATE_USERS),
       new ExtensionAttribute(ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_PROCESS_CANDIDATE_GROUPS)
   );
@@ -46,7 +49,11 @@ public class ProcessExport implements BpmnXMLConstants {
     }
 
     xtw.writeAttribute(ATTRIBUTE_PROCESS_EXECUTABLE, Boolean.toString(process.isExecutable()));
-
+    xtw.writeAttribute("isClosed", Boolean.toString(process.isClosed()));
+    if (StringUtils.isNotEmpty(process.getProcessType())) {
+		xtw.writeAttribute("processType", process.getProcessType());
+	}
+    
     if (process.getCandidateStarterUsers().size() > 0) {
       xtw.writeAttribute(ACTIVITI_EXTENSIONS_PREFIX, ACTIVITI_EXTENSIONS_NAMESPACE, ATTRIBUTE_PROCESS_CANDIDATE_USERS,
           BpmnXMLUtil.convertToDelimitedString(process.getCandidateStarterUsers()));
@@ -59,7 +66,9 @@ public class ProcessExport implements BpmnXMLConstants {
 
     // write custom attributes
     BpmnXMLUtil.writeCustomAttributes(process.getAttributes().values(), xtw, defaultProcessAttributes);
-
+    
+   
+    
     if (StringUtils.isNotEmpty(process.getDocumentation())) {
 
       xtw.writeStartElement(ELEMENT_DOCUMENTATION);

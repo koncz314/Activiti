@@ -33,6 +33,7 @@ public class UserTask extends Task implements IImplementation {
   protected List<String> candidateGroups = new ArrayList<String>();
   protected List<FormProperty> formProperties = new ArrayList<FormProperty>();
   protected List<ActivitiListener> taskListeners = new ArrayList<ActivitiListener>();
+  protected Rendering rendering;
 
   public String getAssignee() {
     return assignee;
@@ -95,7 +96,13 @@ public class UserTask extends Task implements IImplementation {
     this.taskListeners = taskListeners;
   }
   
-  public UserTask clone() {
+  public Rendering getRendering() {
+	return rendering;
+}
+public void setRendering(Rendering rendering) {
+	this.rendering = rendering;
+}
+public UserTask clone() {
     UserTask clone = new UserTask();
     clone.setValues(this);
     return clone;
@@ -127,6 +134,19 @@ public class UserTask extends Task implements IImplementation {
         taskListeners.add(listener.clone());
       }
     }
+    
+    if (otherElement.getRendering() != null && otherElement.getRendering().getExtensionElements() != null) {
+    	rendering = new Rendering();
+    	for (String key : otherElement.getRendering().getExtensionElements().keySet()) {
+    		List<ExtensionElement> extList = otherElement.getRendering().getExtensionElements().get(key);
+    		for (ExtensionElement element : extList) {
+        		rendering.addExtensionElement(element.clone());
+        	}
+    	}
+    } else {
+    	rendering = null;
+    }
+   
   }
 	@Override
 	public String getImplementationType() {

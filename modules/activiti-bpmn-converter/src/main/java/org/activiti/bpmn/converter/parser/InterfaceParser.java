@@ -84,7 +84,8 @@ public class InterfaceParser implements BpmnXMLConstants {
         	
         } else if (xtr.isEndElement() && ELEMENT_OPERATION.equalsIgnoreCase(xtr.getLocalName())) {
           if (operation != null && StringUtils.isNotEmpty(operation.getImplementationRef())) {
-            interfaceObject.getOperations().add(operation);
+        	  operation.setParentInterfaceName(interfaceObject.getName());
+        	  interfaceObject.getOperations().add(operation);
           }
           
         } else if (xtr.isEndElement() && ELEMENT_INTERFACE.equals(xtr.getLocalName())) {

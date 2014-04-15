@@ -1,17 +1,12 @@
 package hu.clickandlike.bpmn.model.interfaces;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.activiti.bpmn.model.ResourceRole;
 
 public interface IResourceRoleContainer {
-	public void addResourceRole(ResourceRole role);
+	public void setResourceRoles(List<ResourceRole> roleList);
 
-	public boolean containsResourceRole(ResourceRole role);
+	public List<ResourceRole> getResourceRoles();
 
-	public ResourceRole getResourceRole(String id);
-
-	public Collection<ResourceRole> getAllResourceRoles();
-
-	public Collection<String> getResourceRoleIds();
 }
