@@ -114,6 +114,8 @@ public void setValues(Activity otherActivity) {
     setForCompensation(otherActivity.isForCompensation());
     if (otherActivity.getLoopCharacteristics() != null) {
       setLoopCharacteristics(otherActivity.getLoopCharacteristics().clone());
+    } else {
+    	setLoopCharacteristics(null);
     }
     if (otherActivity.getIoSpecification() != null) {
       setIoSpecification(otherActivity.getIoSpecification().clone());

@@ -12,12 +12,13 @@
  */
 package org.activiti.bpmn.converter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -149,7 +150,10 @@ public abstract class BaseBpmnXMLConverter implements BpmnXMLConstants {
     xtw.writeStartElement(getXMLElementName());
     didWriteExtensionStartElement = false;
     writeDefaultAttribute(ATTRIBUTE_ID, baseElement.getId(), xtw);
+    
     writeAdditionalAttributes(baseElement, xtw);
+
+    	//BpmnXMLUtil.writeCustomAttributes(baseElement.getAttributes().values(), xtw, defaultElementAttributes);
     
     if (baseElement instanceof Gateway) {
         final Gateway gateway = (Gateway) baseElement;

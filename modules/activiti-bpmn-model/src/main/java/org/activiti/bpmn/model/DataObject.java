@@ -8,6 +8,13 @@ public class DataObject extends FlowElement implements IData {
   protected String itemSubjectRef;
   protected boolean isCollection = false;
   
+  /*@Override
+	public void setId(String id) {
+		String oldId = getId();
+		super.setId(id);
+		firePropertyChangeEvent("id", oldId, id);
+	}*/
+  
   public String getItemSubjectRef() {
     return itemSubjectRef;
   }

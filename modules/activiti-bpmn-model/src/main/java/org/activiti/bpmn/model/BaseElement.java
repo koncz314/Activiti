@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Tijs Rademakers
  */
-public abstract class BaseElement implements HasExtensionAttributes {
+public abstract class BaseElement /*extends ChangeListenerSupportObject*/ implements HasExtensionAttributes {
   
   protected String id;
   protected String documentation;
@@ -31,7 +31,7 @@ public abstract class BaseElement implements HasExtensionAttributes {
   protected Map<String, List<ExtensionElement>> extensionElements = new LinkedHashMap<String, List<ExtensionElement>>();
   /** extension attributes could be part of each element */
   protected Map<String, List<ExtensionAttribute>> attributes = new LinkedHashMap<String, List<ExtensionAttribute>>();
-
+  
   public String getId() {
     return id;
   }
@@ -100,6 +100,16 @@ public int getXmlRowNumber() {
     return null;
   }
 
+  public void setAttributeValue(String namespace, String name, String value) {
+	  List<ExtensionAttribute> attributes = getAttributes().get(name);
+	  if (attributes != null && !attributes.isEmpty()) {
+		  for (ExtensionAttribute attribute : attributes) {
+		        if ( namespace == attribute.getNamespace())
+		           attribute.setValue(value);
+		      }
+	  }
+  }
+  
   @Override
   public void addAttribute(ExtensionAttribute attribute) {
     if (attribute != null && StringUtils.isNotEmpty(attribute.getName())) {
@@ -118,7 +128,9 @@ public int getXmlRowNumber() {
   }
   
   public void setValues(BaseElement otherElement) {
-    setId(otherElement.getId());
+	  //propertyChangeListeners = new ArrayList<PropertyChangeListener>();
+	    //propertyChangeListeners.addAll(otherElement.getPropertyChangeListeners());
+	setId(otherElement.getId());
     setDocumentation(otherElement.getDocumentation());
     extensionElements = new LinkedHashMap<String, List<ExtensionElement>>();
     if (otherElement.getExtensionElements() != null && otherElement.getExtensionElements().size() > 0) {
@@ -147,7 +159,11 @@ public int getXmlRowNumber() {
         }
       }
     }
+    
+    
   }
+  
+
   
   public abstract BaseElement clone();
 }

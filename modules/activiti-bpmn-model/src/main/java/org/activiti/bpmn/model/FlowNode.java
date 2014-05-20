@@ -41,7 +41,9 @@ public abstract class FlowNode extends FlowElement {
   
 	public void setValues(FlowNode otherNode) {
 		super.setValues(otherNode);
-		incomingFlows = new ArrayList<SequenceFlow>();
+		setIncomingFlows(otherNode.getIncomingFlows());
+		setOutgoingFlows(otherNode.getOutgoingFlows());
+		/*incomingFlows = new ArrayList<SequenceFlow>();
 		if (otherNode.getIncomingFlows() != null
 				&& otherNode.getIncomingFlows().size() > 0) {
 			for (SequenceFlow flow : otherNode.getIncomingFlows()) {
@@ -58,7 +60,7 @@ public abstract class FlowNode extends FlowElement {
 				//System.out.println("Outgoing : "+ flow.getId()+" copied");
 			}
 		}
-		
+		*/
 		
 	}
 }

@@ -158,16 +158,25 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
     }
     
     boolean readyWithExtensionElement = false;
+    boolean wasCharacters = false;
     while (readyWithExtensionElement == false && xtr.hasNext()) {
       xtr.next();
+      
       if (xtr.isCharacters()) {
         if (StringUtils.isNotEmpty(xtr.getText().trim())) {
-          extensionElement.setElementText(xtr.getText().trim());
+          if (wasCharacters) {
+        	  extensionElement.setElementText(extensionElement.getElementText() + xtr.getText().trim());
+          } else {
+        	  extensionElement.setElementText(xtr.getText().trim());
+        	  wasCharacters = true;
+          }
         }
       } else if (xtr.isStartElement()) {
+    	  wasCharacters = false;
         ExtensionElement childExtensionElement = parseExtensionElement(xtr);
         extensionElement.addChildElement(childExtensionElement);
       } else if (xtr.isEndElement() && extensionElement.getName().equalsIgnoreCase(xtr.getLocalName())) {
+    	  wasCharacters = false;
         readyWithExtensionElement = true;
       }
     }

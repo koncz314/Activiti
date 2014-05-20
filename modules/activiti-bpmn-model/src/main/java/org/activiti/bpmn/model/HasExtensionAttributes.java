@@ -20,6 +20,7 @@ public interface HasExtensionAttributes {
    * @return attribute value or null in case when attribute was not found
    */
   String getAttributeValue(String namespace, String name);
+  void setAttributeValue(String namespace, String name, String value);
 
   /** add attribute to the object */
   void addAttribute(ExtensionAttribute attribute);

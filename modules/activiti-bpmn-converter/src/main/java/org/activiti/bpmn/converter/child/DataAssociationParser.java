@@ -25,19 +25,19 @@ public class DataAssociationParser implements BpmnXMLConstants {
           String sourceRef = xtr.getElementText();
           //System.out.println("SOURCEREF: "+ sourceRef);
           if (StringUtils.isNotEmpty(sourceRef)) {
-            dataAssociation.setSourceRef(sourceRef.trim());
+            dataAssociation.setSourceRef(sourceRef);//trim
           }
 
         } else if (xtr.isStartElement() && ELEMENT_TARGET_REF.equals(xtr.getLocalName())) {
           String targetRef = xtr.getElementText();
           if (StringUtils.isNotEmpty(targetRef)) {
-            dataAssociation.setTargetRef(targetRef.trim());
+            dataAssociation.setTargetRef(targetRef);//trim
           }
           
         } else if (xtr.isStartElement() && ELEMENT_TRANSFORMATION.equals(xtr.getLocalName())) {
           String transformation = xtr.getElementText();
           if (StringUtils.isNotEmpty(transformation)) {
-            dataAssociation.setTransformation(transformation.trim());
+            dataAssociation.setTransformation(transformation);//trim
           }
           
         } else if (xtr.isStartElement() && ELEMENT_ASSIGNMENT.equals(xtr.getLocalName())) {
@@ -51,13 +51,13 @@ public class DataAssociationParser implements BpmnXMLConstants {
         } else if (xtr.isStartElement() && ELEMENT_FROM.equals(xtr.getLocalName())) {
           String from = xtr.getElementText();
           if (assignment != null && StringUtils.isNotEmpty(from)) {
-            assignment.setFrom(from.trim());
+            assignment.setFrom(from);//trim
           }
           
         } else if (xtr.isStartElement() && ELEMENT_TO.equals(xtr.getLocalName())) {
           String to = xtr.getElementText();
           if (assignment != null && StringUtils.isNotEmpty(to)) {
-            assignment.setTo(to.trim());
+            assignment.setTo(to);//trim
           }
           
         } else if (xtr.isEndElement() && ELEMENT_ASSIGNMENT.equals(xtr.getLocalName())) {
